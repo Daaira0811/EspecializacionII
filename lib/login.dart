@@ -2,10 +2,11 @@
 
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'dart:convert';
+
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_fincet/balanceGastos.dart';
 import 'package:flutter_application_fincet/register.dart';
 
 // aqui solo cambie el nombre de la clase login
@@ -34,8 +35,8 @@ class _InicioState extends State<Inicio> {
   @override
   Widget build(BuildContext context) {
     return Scaffold( 
-       
-        appBar: AppBar(
+        
+        appBar: AppBar( 
          centerTitle: true,
          backgroundColor: Color.fromARGB(255,96, 95, 95)  ,
           
@@ -57,14 +58,6 @@ class _InicioState extends State<Inicio> {
 Widget cuerpo(context){
   return Container(
     color: Color.fromARGB(255, 46, 46,46),
-    /*
-    decoration: BoxDecoration(
-      image: DecorationImage(image: NetworkImage("https://i.pinimg.com/originals/62/b8/36/62b836f9037d62691f11b41b5025f0b4.jpg"),
-      fit: BoxFit.cover
-      )
-     
-    ),
-    */
     child: Center(
       child: Column(
         
@@ -79,10 +72,10 @@ Widget cuerpo(context){
           SizedBox(height: 15,),
          
           Column(
-             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
       
             children: [         
-              botonEntrar(),
+              botonEntrar(context),
               SizedBox(height: 15,),
               botonRegistrar(context),
             ],
@@ -107,12 +100,9 @@ Widget textoIniciarSesion(){
 
 Widget textoIngresarCorreo(){
   return Text("Ingrese correo",
-   
    style: TextStyle(color: Colors.white, 
    fontSize: 15,
    fontWeight: FontWeight.normal),
-  
-
   );
   
 }
@@ -121,13 +111,11 @@ Widget campoUsuario(){
   Text("Ingrese correo");
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-    
     child: TextField(
       decoration: InputDecoration(
         hintText: "Correo",
         fillColor: Color.fromARGB(255, 217, 217, 217),
-        filled: true,
-        
+        filled: true, 
       ),
     ),
   );
@@ -142,21 +130,22 @@ Widget campoClave(){
         hintText: "Clave",
         fillColor: Color.fromARGB(255,  217, 217, 217),
         filled: true,
-        
       ),
     ),
   );
 }
 
-Widget botonEntrar(){
+Widget botonEntrar(context){
   return TextButton(
    style: TextButton.styleFrom(
     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
     foregroundColor: Colors.black,
     backgroundColor: Color.fromARGB(255, 217, 217, 217),
    ),
- 
-   onPressed: (){},
+   onPressed: (){
+    Navigator.push(context, 
+    MaterialPageRoute(builder: (context)=> BalanceGastos(),));
+   }, // aqui deberia redirigir al balance general
    child: Text("Iniciar sesion",
    style: TextStyle(fontSize: 25),)
    );
@@ -168,7 +157,6 @@ Widget botonRegistrar(context){
     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
     foregroundColor: Colors.black,
     backgroundColor: Color.fromARGB(255,217, 217, 217),
-
    ),
  
    onPressed: (){
