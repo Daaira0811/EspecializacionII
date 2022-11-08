@@ -14,13 +14,15 @@ class _mostrarCuentasState extends State<mostrarCuentas> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 96, 95, 95),
-        title: Text(
+        backgroundColor: const Color.fromARGB(255, 96, 95, 95),
+        title: const Text(
           "FINCET",
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
       ),
-      body: cuerpo(context),
+      body: cuerpo(
+        context,
+      ),
       bottomNavigationBar:
           BottomNavigationBar(items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -41,21 +43,29 @@ class _mostrarCuentasState extends State<mostrarCuentas> {
 }
 
 Widget cuerpo(context) {
-  return Container(
-    color: Color.fromARGB(255, 46, 46, 46),
-    child: Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [titulo(context), misCuentas(context)],
-      ),
-    ),
+  return ListView(
+    scrollDirection: Axis.vertical,
+    shrinkWrap: true,
+    //physics: NeverScrollableScrollPhysics(),
+    // color: Color.fromARGB(255, 46, 46, 46),
+    children: [
+      Container(
+          color: const Color.fromARGB(255, 46, 46, 46),
+          child: Padding(
+            padding: const EdgeInsets.all(25),
+            child: ListView(
+              shrinkWrap: true,
+              //mainAxisAlignment: MainAxisAlignment.start,
+              children: [titulo(context), misCuentas(context)],
+            ),
+          ))
+    ],
   );
 }
 
 Widget titulo(context) {
-  return Container(
-      child: Column(children: <Widget>[
+  // ignore: prefer_const_literals_to_create_immutables
+  return Column(children: <Widget>[
     const Text(
       // texto de balance gastos
       "Mis Cuentas",
@@ -65,15 +75,15 @@ Widget titulo(context) {
         fontWeight: FontWeight.bold,
       ),
     ),
-    Divider(
+    const Divider(
       // barrita blanca que separa
       color: Colors.white,
       thickness: 3,
     ),
-    SizedBox(
+    const SizedBox(
       height: 10,
     ), // da espacio entre barrita y balance
-  ]));
+  ]);
 }
 
 Widget misCuentas(context) {
@@ -113,8 +123,9 @@ Widget misCuentas(context) {
             child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
               ListTile(
                 leading: Column(
+                  // ignore: prefer_const_literals_to_create_immutables
                   children: [
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(top: 30, left: 10),
                       child: Icon(Icons.account_balance_outlined),
                     )
@@ -124,9 +135,9 @@ Widget misCuentas(context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 15),
+                      padding: const EdgeInsets.only(top: 15),
                       child: Text("${banco[index]}",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold)),
                     )
                   ],
@@ -135,9 +146,9 @@ Widget misCuentas(context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("\n" "${tipo[index]}" "\n",
-                        style: TextStyle(fontSize: 18)),
+                        style: const TextStyle(fontSize: 18)),
                     Text("${valor[index]}" "\n",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,

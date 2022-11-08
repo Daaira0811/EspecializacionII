@@ -14,10 +14,11 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 96, 95, 95),
+        backgroundColor: const Color.fromARGB(255, 96, 95, 95),
+        // ignore: prefer_const_constructors
         title: Text(
           "FINCET",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
       ),
       body: cuerpo(context),
@@ -42,7 +43,7 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
 
 Widget cuerpo(context) {
   return Container(
-    color: Color.fromARGB(255, 46, 46, 46),
+    color: const Color.fromARGB(255, 46, 46, 46),
     child: Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -54,9 +55,8 @@ Widget cuerpo(context) {
 }
 
 Widget titulo(context) {
-  return Container(
-      child: Column(children: <Widget>[
-    const Text(
+  return Column(children: const <Widget>[
+    Text(
       // texto de balance gastos
       "Agregar Cuenta",
       style: TextStyle(
@@ -73,5 +73,5 @@ Widget titulo(context) {
     SizedBox(
       height: 10,
     ), // da espacio entre barrita y balance
-  ]));
+  ]);
 }

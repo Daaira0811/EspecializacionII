@@ -16,7 +16,11 @@ class Fincet extends StatelessWidget {
     return MaterialApp(
       title: 'Fincet',
       theme: ThemeData(),
+<<<<<<< HEAD
       home: const Login(),
+=======
+      home: const mostrarCuentas(),
+>>>>>>> 20361c415bb01b75bc3738dfcf6ddae09e5f83c4
     );
   }
 }
