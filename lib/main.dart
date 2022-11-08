@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_fincet/agregarCuenta.dart';
-import 'package:flutter_application_fincet/balanceGastos.dart';
 import 'package:flutter_application_fincet/login.dart';
 
-import 'misCuentas.dart';
 
 void main() {
   runApp(const Fincet());
@@ -17,6 +14,9 @@ class Fincet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Fincet', theme: ThemeData(), home: const AgregarCuenta());
+      title: 'Fincet',
+      theme: ThemeData(),
+      home: const Login(),
+    );
   }
 }
