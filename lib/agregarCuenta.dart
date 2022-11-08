@@ -234,7 +234,7 @@ Widget formulario(context) {
             children: [
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: color,
+                 //   primary: color,
                     onPrimary: Colors.black,
                     shape: CircleBorder(),
                   ),
