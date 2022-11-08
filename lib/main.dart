@@ -17,9 +17,6 @@ class Fincet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fincet',
-      theme: ThemeData(),
-      home: const mostrarCuentas(),
-    );
+        title: 'Fincet', theme: ThemeData(), home: const AgregarCuenta());
   }
 }
