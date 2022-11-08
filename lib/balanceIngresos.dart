@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/gastos.dart';
 
-class BalanceGastos extends StatelessWidget {
-  const BalanceGastos({super.key});
+class BalanceIngresos extends StatelessWidget {
+  const BalanceIngresos({super.key});
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +71,7 @@ Widget balanceGastos(context) {
       contentPadding: const EdgeInsets.all(30),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
       hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
-      hintText: "- 25.000 CLP",
+      hintText: "57.000 CLP",
       fillColor: const Color.fromARGB(255, 217, 217, 217),
       filled: true,
     ),
@@ -123,16 +123,16 @@ Widget ultimosMovimientos(context) {
 
 Widget ultimosMovimientosDisplay(context) {
   final List<String> categoriaGasto = <String>[
-    'Comida',
-    'Disney',
+    'Trabajo',
+    'Regalo',
   ];
   final List<String> cuenta = <String>[
     "Banco Santander",
     "Efectivo",
   ];
   final List<String> valor = <String>[
-    "-15.000 CLP",
-    "-7.000 CLP",
+    "15.000 CLP",
+    "25.000 CLP",
   ];
 
   return ListView.separated(
@@ -221,8 +221,10 @@ Widget graficosTexto(context){
 Widget grafico(context) {
 
   final List<Gastos> data = [
-    Gastos(20000, "2", charts.ColorUtil.fromDartColor(Colors.red), "Gasto"),
-    Gastos(5000, "4", charts.ColorUtil.fromDartColor(Colors.red), "Gasto"), 
+    Gastos(15000, "1", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
+   
+    Gastos(25000, "3", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
+    Gastos(10000, "5", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
   ];
   
   List<charts.Series<Gastos, String>> series = [
