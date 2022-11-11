@@ -48,34 +48,38 @@ class _InicioState extends State<Inicio> {
 }
 
 Widget cuerpo(context) {
-  return Container(
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 150,
-          ),
-          textoIniciarSesion(),
-          //textoIngresarCorreo(),
-          campoUsuario(),
-          campoClave(),
-          SizedBox(
-            height: 15,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              botonEntrar(context),
-              SizedBox(
-                height: 15,
-              ),
-              botonRegistrar(context),
-            ],
-          ),
-        ],
+  return ListView(
+    children:[
+Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 150,
+            ),
+            textoIniciarSesion(),
+            //textoIngresarCorreo(),
+            campoUsuario(),
+            campoClave(),
+            SizedBox(
+              height: 15,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                botonEntrar(context),
+                SizedBox(
+                  height: 15,
+                ),
+                botonRegistrar(context),
+              ],
+            ),
+          ],
+        ),
       ),
     ),
+    ] 
   );
 }
 
@@ -173,7 +177,7 @@ Widget botonEntrar(context) {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => IngresosPage(),
+              builder: (context) => BalanceGeneral(),
             ));
       }, // aqui deberia redirigir al balance general
       child: Text(

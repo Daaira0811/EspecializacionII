@@ -42,28 +42,34 @@ class _IngresosPageState extends State<IngresosPage> {
   }
 
 }
+
   
 
 Widget cuerpo(context) {
-  return Container(
-    color: const Color.fromARGB(255, 46, 46, 46),
-    child: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children :[
-            header(context),
-            divisor(context),
-            formMonto(context),
-            formCuenta(context),
-            campoAsunto(context),
-            campoFechaHora(context),
-            botonAgregar(context)
-            ],
+  return ListView(
+    shrinkWrap: true,
+    children:[
+      Container(
+      color: const Color.fromARGB(255, 46, 46, 46),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children :[
+              header(context),
+              divisor(context),
+              formMonto(context),
+              formCuenta(context),
+              campoAsunto(context),
+              campoFechaHora(context),
+              botonAgregar(context)
+              ],
+          ),
         ),
       ),
     ),
+    ] 
   );
 }
 

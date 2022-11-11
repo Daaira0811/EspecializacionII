@@ -22,44 +22,49 @@ class Registrarse extends StatelessWidget {
 }
 
 Widget cuerpo(context) {
-  return Container(
-    color: Color.fromARGB(255, 46, 46, 46),
-    /*
-    decoration: BoxDecoration(
-      image: DecorationImage(image: NetworkImage("https://i.pinimg.com/originals/62/b8/36/62b836f9037d62691f11b41b5025f0b4.jpg"),
-      fit: BoxFit.cover
-      )
-     
-    ),
-    */
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 150,
-          ),
-          signIn(),
-          campoUsuario(),
-          campoClave(),
-          campoReingresarClave(),
-          SizedBox(
-            height: 15,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              botonRegistrar(context),
-              SizedBox(
-                height: 15,
-              ),
-              botonLogear(context),
-            ],
-          ),
-        ],
+  return ListView(children: [
+    Container(
+      color: Color.fromARGB(255, 46, 46, 46),
+      /*
+      decoration: BoxDecoration(
+        image: DecorationImage(image: NetworkImage("https://i.pinimg.com/originals/62/b8/36/62b836f9037d62691f11b41b5025f0b4.jpg"),
+        fit: BoxFit.cover
+        )
+       
       ),
-    ),
-  );
+      */
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 150,
+            ),
+            signIn(),
+            campoUsuario(),
+            campoClave(),
+            campoReingresarClave(),
+            SizedBox(
+              height: 15,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                botonRegistrar(context),
+                SizedBox(
+                  height: 15,
+                ),
+                botonLogear(context),
+                SizedBox(
+                  height: 79,
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    )
+  ]);
 }
 
 Widget signIn() {
