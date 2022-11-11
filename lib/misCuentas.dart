@@ -2,10 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/login.dart';
 
 class mostrarCuentas extends StatefulWidget {
+  //final Data data;
+  //const mostrarCuentas({super.key, required this.data});
   const mostrarCuentas({super.key});
 
   @override
   State<mostrarCuentas> createState() => _mostrarCuentasState();
+}
+
+class Data {
+  String nombreCuenta = "Nombre1";
+  String divisa = 'Divisa1';
+  double saldo = 0.1;
+
+  Data({required this.nombreCuenta, required this.divisa, required this.saldo});
 }
 
 class _mostrarCuentasState extends State<mostrarCuentas> {
@@ -53,9 +63,9 @@ Widget cuerpo(context) {
           color: const Color.fromARGB(255, 46, 46, 46),
           child: Padding(
             padding: const EdgeInsets.all(25),
-            child: ListView(
-              shrinkWrap: true,
-              //mainAxisAlignment: MainAxisAlignment.start,
+            child: Column(
+              // shrinkWrap: true,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [titulo(context), misCuentas(context)],
             ),
           ))
@@ -145,14 +155,23 @@ Widget misCuentas(context) {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("\n" "${tipo[index]}" "\n",
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text("${tipo[index]}",
                         style: const TextStyle(fontSize: 18)),
-                    Text("${valor[index]}" "\n",
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text("${valor[index]}",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
-                        ))
+                        )),
+                    SizedBox(
+                      height: 15,
+                    ),
                   ],
                 ),
               )
