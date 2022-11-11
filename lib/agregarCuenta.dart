@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/login.dart';
 import 'package:flutter_application_fincet/misCuentas.dart';
+import 'package:flutter_application_fincet/widgets/navBar.dart';
+
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class AgregarCuenta extends StatefulWidget {
@@ -22,7 +24,19 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
   final formKey = GlobalKey<FormState>();
   Color pickerColor = const Color(0xff2196f3);
   Color currentColor = const Color(0xff2196f3);
+   int index = 0;
+  NavBar? myNavBar;
 
+  @override
+  void initState() {
+    myNavBar = NavBar(currentIndex: (i) {
+      setState(() {
+        index = i;
+      });
+    });
+
+    super.initState();
+  }
   void changeColor(Color color) {
     setState(() {
       pickerColor = color;
@@ -46,28 +60,9 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
         ),
       ),
       body: cuerpo(context),
-      bottomNavigationBar:
-          BottomNavigationBar(items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.add_circle_outline),
-          label: 'Agregar',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Cuenta',
-        ),
-      ]),
+      bottomNavigationBar: myNavBar,
     );
   }
-//    Widget buildColorPicker() => ColorPicker(
-//   pickerColor: color,
-//   onColorChanged:(color) => this.color=color,
-//   );
-// }
 
   Widget cuerpo(context) {
     return ListView(
@@ -338,7 +333,7 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => mostrarCuentas(),
+                          builder: (context) => const mostrarCuentas(),
                           //misCuentas(data: Data(nombreCuenta: nombreCuenta!, divisa: selectedItem!, saldo: saldo!
                         ));
                   }),

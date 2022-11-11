@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_fincet/IngresosPage.dart';
 import 'package:flutter_application_fincet/balanceGastos.dart';
 import 'package:flutter_application_fincet/balanceIngresos.dart';
 import 'package:flutter_application_fincet/register.dart';
@@ -172,7 +173,7 @@ Widget botonEntrar(context) {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BalanceIngresos(),
+              builder: (context) => IngresosPage(),
             ));
       }, // aqui deberia redirigir al balance general
       child: Text(

@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/gastos.dart';
+import 'package:flutter_application_fincet/widgets/navBar.dart';
 
-class BalanceGeneral extends StatelessWidget {
+class BalanceGeneral extends StatefulWidget {
   const BalanceGeneral({super.key});
 
-  Widget build(BuildContext context) {
+ @override
+  State<StatefulWidget> createState() => _BalanceGeneralState();
+
+}
+class _BalanceGeneralState  extends State<BalanceGeneral>{
+    
+     int index = 0;
+  NavBar? myNavBar;
+  @override
+  void initState() {
+    myNavBar = NavBar(currentIndex: (i) {
+      setState(() {
+        index = i;
+      });
+    });
+
+    super.initState();
+  }
+
+   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -16,6 +36,7 @@ class BalanceGeneral extends StatelessWidget {
         ),
       ),
       body: cuerpo(context),
+      bottomNavigationBar: myNavBar,
     );
   }
 }

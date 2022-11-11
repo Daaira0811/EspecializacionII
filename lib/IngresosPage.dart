@@ -1,13 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/BalanceGeneral.dart';
+import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
-
-class IngresosPage extends StatelessWidget {
+class IngresosPage extends StatefulWidget {
   const IngresosPage({super.key});
 
   @override
+  State<IngresosPage> createState() => _IngresosPageState();
+}
+
+class _IngresosPageState extends State<IngresosPage> {
+  int index = 0;
+  NavBar? myNavBar;
+
+  @override
+  void initState() {
+    myNavBar = NavBar(currentIndex: (i) {
+      setState(() {
+        index = i;
+      });
+    });
+
+    super.initState();
+  }
+ @override
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
@@ -19,9 +37,12 @@ class IngresosPage extends StatelessWidget {
         ),
       ),
       body: cuerpo(context),
+      bottomNavigationBar: myNavBar,
      );
   }
+
 }
+  
 
 Widget cuerpo(context) {
   return Container(

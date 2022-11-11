@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/login.dart';
+import 'package:flutter_application_fincet/widgets/navBar.dart';
 
 class mostrarCuentas extends StatefulWidget {
   //final Data data;
@@ -19,6 +20,23 @@ class Data {
 }
 
 class _mostrarCuentasState extends State<mostrarCuentas> {
+  int index = 0;
+  NavBar? myNavBar;
+  @override
+  void initState() {
+    myNavBar = NavBar(currentIndex: (i) {
+      setState(() {
+        index = i;
+      });
+    });
+
+    super.initState();
+  }
+
+  static const List<Widget> _pages = <Widget>[
+    Login(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,36 +48,35 @@ class _mostrarCuentasState extends State<mostrarCuentas> {
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
       ),
-      body: cuerpo(
-        context,
-      ),
-      bottomNavigationBar:
-          BottomNavigationBar(items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.add_circle_outline),
-          label: 'Agregar',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Cuenta',
-        ),
-      ]),
+      body: cuerpo(context),
+      bottomNavigationBar: myNavBar,
+
+      // bottomNavigationBar:
+      //     BottomNavigationBar(items: const <BottomNavigationBarItem>[
+      //   BottomNavigationBarItem(
+      //     icon: Icon(Icons.home),
+      //     label: 'Home',
+      //   ),
+      //   BottomNavigationBarItem(
+      //     icon: Icon(Icons.add_circle_outline),
+      //     label: 'Agregar',
+      //   ),
+      //   BottomNavigationBarItem(
+      //     icon: Icon(Icons.person),
+      //     label: 'Cuenta',
+      //   ),
+      // ]),
     );
   }
 }
 
 Widget cuerpo(context) {
-  return ListView(
-    scrollDirection: Axis.vertical,
-    shrinkWrap: true,
-    //physics: NeverScrollableScrollPhysics(),
-    // color: Color.fromARGB(255, 46, 46, 46),
-    children: [
-      Container(
+  return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      // shrinkWrap: true,
+      //physics: NeverScrollableScrollPhysics(),
+      // color: Color.fromARGB(255, 46, 46, 46),
+      child: Container(
           color: const Color.fromARGB(255, 46, 46, 46),
           child: Padding(
             padding: const EdgeInsets.all(25),
@@ -68,9 +85,7 @@ Widget cuerpo(context) {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [titulo(context), misCuentas(context)],
             ),
-          ))
-    ],
-  );
+          )));
 }
 
 Widget titulo(context) {
@@ -101,23 +116,21 @@ Widget misCuentas(context) {
     'Banco Santander',
     'Banco Estado',
     'Efectivo',
-    'Banco Santander'
   ];
   final List<String> tipo = <String>[
     "Balance",
     "Balance",
     "Balance",
-    "Balance"
   ];
   final List<String> valor = <String>[
     "120.000 CLP",
     "48.000 CLP",
     "22.000 CLP",
-    "0 CLP"
   ];
 
   return ListView.separated(
     shrinkWrap: true,
+    primary: false,
     padding: const EdgeInsets.all(12),
     itemCount: banco.length,
     itemBuilder: (BuildContext context, int index) {
