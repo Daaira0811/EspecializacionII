@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/login.dart';
-import 'package:flutter_application_fincet/misCuentas.dart';
 
 void main() {
   runApp(const Fincet());
@@ -16,7 +15,7 @@ class Fincet extends StatelessWidget {
     return MaterialApp(
       title: 'Fincet',
       theme: ThemeData(),
-      home: const mostrarCuentas(),
+      home: const Login(),
     );
   }
 }
