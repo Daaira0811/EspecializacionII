@@ -42,22 +42,26 @@ class _MyWidgetState extends State<MyWidget> {
 
 
 Widget cuerpo(context) {
-  return Container(
-    color: const Color.fromARGB(255, 46, 46, 46),
-    child: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            balanceGastos(context),
-            ultimosMovimientos(context),
-            graficosTexto(context),
-            Expanded(flex:1,child: grafico(context))
-          ],
+  return ListView(
+    children: 
+      [Container(
+        color: const Color.fromARGB(255, 46, 46, 46),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                balanceGastos(context),
+                ultimosMovimientos(context),
+                graficosTexto(context),
+                Container(height: 220, width: 700,child: grafico(context))
+              ],
+            ),
+          ),
         ),
       ),
-    ),
+    ],
   );
 }
 
