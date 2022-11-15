@@ -53,7 +53,7 @@ Widget cuerpo(context) {
             balanceGastos(context),
             ultimosMovimientos(context),
             graficosTexto(context),
-            Expanded(child: grafico(context))
+            Expanded(flex:1,child: grafico(context))
           ],
         ),
       ),
@@ -241,7 +241,7 @@ Widget graficosTexto(context){
 
 Widget grafico(context) {
 
-  final List<Gastos> data = [
+  List<Gastos> data = [
     Gastos(15000, "1", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
    
     Gastos(25000, "3", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),

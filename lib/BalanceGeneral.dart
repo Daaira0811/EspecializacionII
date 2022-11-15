@@ -6,13 +6,12 @@ import 'package:flutter_application_fincet/widgets/navBar.dart';
 class BalanceGeneral extends StatefulWidget {
   const BalanceGeneral({super.key});
 
- @override
+  @override
   State<StatefulWidget> createState() => _BalanceGeneralState();
-
 }
-class _BalanceGeneralState  extends State<BalanceGeneral>{
-    
-     int index = 0;
+
+class _BalanceGeneralState extends State<BalanceGeneral> {
+  int index = 0;
   NavBar? myNavBar;
   @override
   void initState() {
@@ -25,7 +24,7 @@ class _BalanceGeneralState  extends State<BalanceGeneral>{
     super.initState();
   }
 
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -42,61 +41,66 @@ class _BalanceGeneralState  extends State<BalanceGeneral>{
 }
 
 Widget cuerpo(context) {
-  return Container(
-    color: const Color.fromARGB(255, 46, 46, 46),
-    child: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            balanceGastos(context),
-            ultimosMovimientos(context),
-            graficosTexto(context),
-            Expanded(child: grafico(context))
-          ],
+  return ListView(
+    shrinkWrap: true,
+    children: [
+      Container(
+        color: const Color.fromARGB(255, 46, 46, 46),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                balanceGastos(context),
+                ultimosMovimientos(context),
+                graficosTexto(context),
+                Container(height: 220, width: 700, child: grafico(context))
+              ],
+            ),
+          ),
         ),
       ),
-    ),
+    ],
   );
 }
 
 Widget balanceGastos(context) {
   return Column(
     children: [
-  const Text(
-    // texto de balance gastos
-    "Balance gastos",
-    style: TextStyle(
-      color: Colors.white,
-      fontSize: 25,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
+      const Text(
+        // texto de balance gastos
+        "Balance gastos",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
 
-  const Divider(
-    // barrita blanca que separa
-    color: Colors.white,
-    thickness: 3,
-  ),
-  const SizedBox(
-    height: 10,
-  ), // da espacio entre barrita y balance
+      const Divider(
+        // barrita blanca que separa
+        color: Colors.white,
+        thickness: 3,
+      ),
+      const SizedBox(
+        height: 10,
+      ), // da espacio entre barrita y balance
 
-  TextField(
-    // Caja blanca con balance
-    enabled: false,
+      TextField(
+        // Caja blanca con balance
+        enabled: false,
 
-    textAlign: TextAlign.center,
-    decoration: InputDecoration(
-      contentPadding: const EdgeInsets.all(30),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-      hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
-      hintText: "32.000 CLP",
-      fillColor: const Color.fromARGB(255, 217, 217, 217),
-      filled: true,
-    ),
-  ),
+        textAlign: TextAlign.center,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(30),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
+          hintText: "32.000 CLP",
+          fillColor: const Color.fromARGB(255, 217, 217, 217),
+          filled: true,
+        ),
+      ),
     ],
   );
 }
@@ -161,7 +165,8 @@ Widget ultimosMovimientosDisplay(context) {
     padding: const EdgeInsets.all(8),
     itemCount: categoriaGasto.length,
     itemBuilder: (BuildContext context, int index) {
-      return Card( //Caja ultimos movimientos
+      return Card(
+        //Caja ultimos movimientos
         color: const Color.fromARGB(255, 96, 95, 95),
         borderOnForeground: true,
         elevation: 10,
@@ -222,25 +227,24 @@ Widget ultimosMovimientosDisplay(context) {
   );
 }
 
-Widget graficosTexto(context){
-   return  Row(
-          children: const [
-            Text(
-              // texto de ultimos movimientos
-              textAlign: TextAlign.left,
-              "Graficos",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],);
+Widget graficosTexto(context) {
+  return Row(
+    children: const [
+      Text(
+        // texto de ultimos movimientos
+        textAlign: TextAlign.left,
+        "Graficos",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ],
+  );
 }
 
-
 Widget grafico(context) {
-
   final List<Gastos> data = [
     Gastos(15000, "1", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
     Gastos(7000, "1", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
@@ -249,7 +253,7 @@ Widget grafico(context) {
     Gastos(5000, "4", charts.ColorUtil.fromDartColor(Colors.red), "Gasto"),
     Gastos(10000, "5", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
   ];
-  
+
   List<charts.Series<Gastos, String>> series = [
     charts.Series(
         id: "Gastos",

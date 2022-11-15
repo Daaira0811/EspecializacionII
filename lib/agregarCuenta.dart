@@ -163,9 +163,9 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
                   )
                   //labelText: 'Nombre de la cuenta',
                   ),
-              onSaved: (value) {
-                nombreCuenta = value;
-              },
+              // onSaved: (value) {
+              //   nombreCuenta = value;
+              // },
               // validator: (value) {
               //   if (value.isEmpty) {
               //    return "Ingrese nombre de la cuenta";
@@ -325,7 +325,7 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
                         selectedItem != null &&
                         saldo != saldo) {
                       final data = Data(
-                          nombreCuenta: nombreCuenta!,
+                          nombreCuenta: nombreCuenta,
                           divisa: selectedItem!,
                           saldo: saldo!);
                     }
