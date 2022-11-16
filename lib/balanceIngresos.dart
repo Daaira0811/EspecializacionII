@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/gastos.dart';
+import 'package:flutter_application_fincet/verMasIngresos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
@@ -38,6 +39,7 @@ class _BalanceIngresos extends State<BalanceIngresos> {
       ),
       body: cuerpo(context),
       drawer: sideMenu(),
+      bottomNavigationBar: myNavBar,
     );
   }
 }
@@ -56,6 +58,13 @@ Widget cuerpo(context) {
               children: [
                 balanceGastos(context),
                 ultimosMovimientos(context),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    botonEntrar(context),
+                  ],
+                ),
+                graficosTexto(context),
                 graficosTexto(context),
                 Container(height: 220, width: 700,child: grafico(context))
               ],
@@ -226,6 +235,27 @@ Widget ultimosMovimientosDisplay(context) {
     },
     separatorBuilder: (context, int index) => const Divider(),
   );
+}
+
+Widget botonEntrar(context) {
+  return TextButton(
+    
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        foregroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 217, 217, 217),
+      ),
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VerMasIngresos(),
+            ));
+      }, // aqui deberia redirigir al balance general
+      child: Text(
+        "Ver mas",
+        style: TextStyle(fontSize: 15),
+      ));
 }
 
 Widget graficosTexto(context){
