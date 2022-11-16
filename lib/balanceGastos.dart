@@ -64,7 +64,7 @@ Widget cuerpo(context) {
                     botonEntrar(context),
                   ],
                 ),
-                graficosTexto(context),
+                
                 graficosTexto(context),
                 Container(height: 220, width: 700, child: grafico(context))
               ],

@@ -151,7 +151,7 @@ Widget ultimosMovimientosDisplay(context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: 10),
                   child: Text(categoriaGasto[index],
                       style: const TextStyle(
                           fontSize: 15,
