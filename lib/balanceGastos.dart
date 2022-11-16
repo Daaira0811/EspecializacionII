@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/gastos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
+import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
 class BalanceGastos extends StatefulWidget {
   const BalanceGastos({super.key});
@@ -38,6 +39,7 @@ class _BalanceGastos extends State<BalanceGastos> {
       ),
       body: cuerpo(context),
       bottomNavigationBar: myNavBar,
+      drawer: sideMenu(),
     );
   }
 }

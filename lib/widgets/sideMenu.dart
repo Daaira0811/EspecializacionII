@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/balanceGastos.dart';
-import 'package:flutter_application_fincet/misCuentas.dart';
 
 import '../balanceIngresos.dart';
 
@@ -18,7 +17,7 @@ class sideMenu extends StatelessWidget{
               style: TextStyle(color: Colors.white, fontSize: 25),
             ),
             decoration: BoxDecoration(
-                color:  Color.fromARGB(255, 72, 72, 72),
+                color:  const Color.fromARGB(255, 96, 95, 95),
                 ),
           ),
           ListTile(
@@ -42,7 +41,7 @@ class sideMenu extends StatelessWidget{
             title: Text('Cuentas'),
             onTap: () => {Navigator.push(
               context, MaterialPageRoute(
-              builder: (context)=> const mostrarCuentas()
+              builder: (context)=> const BalanceIngresos()
             ))},
           ),
           

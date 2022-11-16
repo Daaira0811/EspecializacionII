@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/login.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
+import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
 class mostrarCuentas extends StatefulWidget {
   //final Data data;
@@ -50,6 +51,7 @@ class _mostrarCuentasState extends State<mostrarCuentas> {
       ),
       body: cuerpo(context),
       bottomNavigationBar: myNavBar,
+      drawer: sideMenu(),
 
       // bottomNavigationBar:
       //     BottomNavigationBar(items: const <BottomNavigationBarItem>[
