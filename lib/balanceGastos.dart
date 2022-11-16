@@ -3,14 +3,14 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/gastos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+class BalanceGastos extends StatefulWidget {
+  const BalanceGastos({super.key});
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<BalanceGastos> createState() => _BalanceGastos();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _BalanceGastos extends State<BalanceGastos> {
   int index = 0;
   NavBar? myNavBar;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/gastos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
+import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
 class BalanceGeneral extends StatefulWidget {
   const BalanceGeneral({super.key});
@@ -35,6 +36,7 @@ class _BalanceGeneralState extends State<BalanceGeneral> {
         ),
       ),
       body: cuerpo(context),
+      drawer: sideMenu(),
       bottomNavigationBar: myNavBar,
     );
   }
@@ -70,7 +72,7 @@ Widget balanceGastos(context) {
     children: [
       const Text(
         // texto de balance gastos
-        "Balance gastos",
+        "Balance general",
         style: TextStyle(
           color: Colors.white,
           fontSize: 25,

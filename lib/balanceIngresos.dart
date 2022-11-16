@@ -3,14 +3,14 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/gastos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+class BalanceIngresos extends StatefulWidget {
+  const BalanceIngresos({super.key});
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<BalanceIngresos> createState() => _BalanceIngresos ();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _BalanceIngresos extends State<BalanceIngresos> {
   int index = 0;
   NavBar? myNavBar;
 
@@ -70,7 +70,7 @@ Widget balanceGastos(context) {
     children: [
   const Text(
     // texto de balance gastos
-    "Balance gastos",
+    "Balance ingresos",
     style: TextStyle(
       color: Colors.white,
       fontSize: 25,
