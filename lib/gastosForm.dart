@@ -30,6 +30,7 @@ class _gastosFormState extends State<gastosForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 96, 95, 95),
         title: const Text(
@@ -39,6 +40,7 @@ class _gastosFormState extends State<gastosForm> {
       ),
       body: cuerpo(context),
       bottomNavigationBar: myNavBar,
+      
     );
   }
 }
@@ -71,13 +73,24 @@ Widget cuerpo(context) {
 Widget header(context) {
   return Container(
       child: Row(
-    children: const [
-      Icon(
-        IconData(0xf05bc, fontFamily: 'MaterialIcons'),
-        color: Colors.white,
-        size: (40),
+    children: < Widget> [
+       Stack( 
+        children: <Widget> [
+         IconButton(
+        icon:Icon(
+          Icons.arrow_circle_left_outlined,
+          color: Colors.white,
+          size: 36,
+          ),
+        onPressed: () {
+          Navigator.pop(context);
+          },
+     
       ),
-      Padding(
+      ],
+      ),
+     
+      const Padding(
         padding: EdgeInsets.only(left: 50),
         child: Text(
           "Agregar gastos",
