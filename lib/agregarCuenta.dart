@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_fincet/DAO/DB.dart';
 import 'package:flutter_application_fincet/login.dart';
 import 'package:flutter_application_fincet/misCuentas.dart';
+import 'package:flutter_application_fincet/models/Cuenta.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -12,6 +14,8 @@ class AgregarCuenta extends StatefulWidget {
   State<AgregarCuenta> createState() => _AgregarCuentaState();
 }
 
+
+
 class Data {
   String nombreCuenta = "Nombre1";
   String divisa = 'Divisa1';
@@ -21,6 +25,14 @@ class Data {
 }
 
 class _AgregarCuentaState extends State<AgregarCuenta> {
+
+  final nombreController = TextEditingController();
+  final saldoController = TextEditingController();
+  late DB db;
+  late Cuenta _cuenta;
+
+
+
   final formKey = GlobalKey<FormState>();
   Color pickerColor = const Color(0xff2196f3);
   Color currentColor = const Color(0xff2196f3);
@@ -150,6 +162,7 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
                   ),
                 )),
             TextFormField(
+              controller: nombreController,
               decoration: const InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -324,10 +337,13 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
                     if (nombreCuenta != null &&
                         selectedItem != null &&
                         saldo != saldo) {
-                      final data = Data(
-                          nombreCuenta: nombreCuenta,
-                          divisa: selectedItem!,
-                          saldo: saldo!);
+                      // final data = Data(
+                      //     nombreCuenta: nombreCuenta,
+                      //     divisa: selectedItem!,
+                      //     saldo: saldo!);
+                      int saldo = int.parse(saldoController.text);
+                      _cuenta = Cuenta ( id:null, nombreCuenta: nombreController.text, saldo:saldo, moneda:selectedItem, color: null);
+                      db.insertCuenta(_cuenta);
                     }
                     //changeData(nombreCuenta, divisa, saldo)
                     Navigator.push(
