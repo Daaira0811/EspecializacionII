@@ -43,7 +43,7 @@ class DB {
           nombreCuenta TEXT NOT NULL UNIQUE,
           saldo INTEGER,
           moneda TEXT NOT NULL,
-          color TEXT NOT NULL
+          color TEXT
          )''');
     // SQL code to create Gasto table
     await db.execute('''  
