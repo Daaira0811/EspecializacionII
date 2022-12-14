@@ -28,7 +28,7 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
 
   final nombreController = TextEditingController();
   final saldoController = TextEditingController();
-  late DB db;
+  late DB db = DB.instance;
   late Cuenta _cuenta;
 
 
@@ -229,6 +229,7 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
                   ),
                 )),
             TextFormField(
+                controller: saldoController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                     suffixText: 'CLP',
@@ -334,17 +335,17 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
                   ),
                   child: const Text("Guardar cuenta"),
                   onPressed: () {
-                    if (nombreCuenta != null &&
-                        selectedItem != null &&
-                        saldo != saldo) {
-                      // final data = Data(
-                      //     nombreCuenta: nombreCuenta,
-                      //     divisa: selectedItem!,
-                      //     saldo: saldo!);
+                    // if (nombreCuenta != null &&
+                    //     selectedItem != null &&
+                    //     saldo != saldo) {
+                    //   // final data = Data(
+                    //   //     nombreCuenta: nombreCuenta,
+                    //   //     divisa: selectedItem!,
+                    //   //     saldo: saldo!);
                       int saldo = int.parse(saldoController.text);
                       _cuenta = Cuenta ( id:null, nombreCuenta: nombreController.text, saldo:saldo, moneda:selectedItem, color: null);
                       db.insertCuenta(_cuenta);
-                    }
+
                     //changeData(nombreCuenta, divisa, saldo)
                     Navigator.push(
                         context,

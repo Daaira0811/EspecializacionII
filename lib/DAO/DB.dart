@@ -30,7 +30,8 @@ class DB {
     getApplicationDocumentsDirectory();
 
     String path = join(documentsDirectory.path, _databaseName);
-    
+    print('db location : '+path);
+
     return await openDatabase(path,
       version:_databaseVersion,
       onCreate: _onCreate);
@@ -40,20 +41,20 @@ class DB {
     // SQL code to create Cuenta table
     await db.execute('''  
         CREATE TABLE cuenta (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARY KEY,
           nombreCuenta TEXT NOT NULL UNIQUE,
           saldo INTEGER,
           moneda TEXT NOT NULL,
-          color TEXT NOT NULL
+          color TEXT 
          )''');
     // SQL code to create Gasto table
     await db.execute('''  
         CREATE TABLE gasto (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          idCuenta INTEGER AUTOINCREMENT,    
+          id INTEGER PRIMARY KEY ,
+          idCuenta INTEGER,    
           monto INTEGER,
           asunto TEXT NOT NULL,
-          fechaHora TEXT    
+          fechaHora TEXT,    
           FOREIGN KEY (idCuenta) REFERENCES cuenta (id)                  
            ON DELETE NO ACTION ON UPDATE NO ACTION
          )''');
@@ -61,11 +62,11 @@ class DB {
      // SQL code to create Ingreso table
     await db.execute('''  
         CREATE TABLE ingreso (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          idCuenta INTEGER AUTOINCREMENT,    
+          id INTEGER PRIMARY KEY,
+          idCuenta INTEGER,    
           monto INTEGER,
           asunto TEXT NOT NULL,
-          fechaHora TEXT    
+          fechaHora TEXT,    
           FOREIGN KEY (idCuenta) REFERENCES cuenta (id)                  
            ON DELETE NO ACTION ON UPDATE NO ACTION
          )''');
@@ -74,7 +75,7 @@ class DB {
    Future<Future<int>> insertCuenta(Cuenta cuenta) async {
     Database database = await _initDB();
 
-    return database.insert("cuenta", cuenta.toMap());
+    return database.insert("cuenta", cuenta.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<Future<int>> updateCuenta(Cuenta cuenta) async {

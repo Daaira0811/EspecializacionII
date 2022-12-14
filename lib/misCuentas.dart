@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_fincet/DAO/DB.dart';
 import 'package:flutter_application_fincet/login.dart';
+import 'package:flutter_application_fincet/models/Cuenta.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
@@ -21,6 +23,8 @@ class Data {
 }
 
 class _mostrarCuentasState extends State<mostrarCuentas> {
+
+
   int index = 0;
   NavBar? myNavBar;
   @override
