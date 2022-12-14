@@ -18,7 +18,7 @@ class Cuenta{
   }
 
   static Cuenta fromMap(Map map) {
-    Cuenta cuenta = new Cuenta();
+    Cuenta cuenta = Cuenta();
     cuenta.id = map['id'];
     cuenta.nombreCuenta = map['nombreCuenta'];
     cuenta.saldo = map['saldo'];

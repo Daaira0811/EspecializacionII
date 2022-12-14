@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter_application_fincet/models/gastos.dart';
+import 'package:flutter_application_fincet/models/ChartTest.dart';
 import 'package:flutter_application_fincet/verMasIngresos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
@@ -281,20 +281,20 @@ Widget graficosTexto(context){
 
 Widget grafico(context) {
 
-  List<Gastos> data = [
-    Gastos(15000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
+  List<ChartTest> data = [
+    ChartTest(15000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
    
-    Gastos(25000, "3", charts.ColorUtil.fromDartColor(Colors.green)),
-    Gastos(10000, "5", charts.ColorUtil.fromDartColor(Colors.green)),
+    ChartTest(25000, "3", charts.ColorUtil.fromDartColor(Colors.green)),
+    ChartTest(10000, "5", charts.ColorUtil.fromDartColor(Colors.green)),
   ];
   
-  List<charts.Series<Gastos, String>> series = [
+  List<charts.Series<ChartTest, String>> series = [
     charts.Series(
         id: "Gastos",
         data: data,
-        domainFn: (Gastos, index) => Gastos.dias,
-        measureFn: (Gastos, index) => Gastos.dinero,
-        colorFn: (Gastos, index) => Gastos.barColor)
+        domainFn: (ChartTest, index) => ChartTest.dias,
+        measureFn: (ChartTest, index) => ChartTest.dinero,
+        colorFn: (ChartTest, index) => ChartTest.barColor)
   ];
   return charts.BarChart(
     series,

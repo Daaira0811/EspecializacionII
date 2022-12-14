@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/AgregarCuenta.dart';
 import 'package:flutter_application_fincet/BalanceGeneral.dart';
 import 'package:flutter_application_fincet/IngresosPage.dart';
-import 'package:flutter_application_fincet/gastos.dart';
 import 'package:flutter_application_fincet/gastosForm.dart';
 import 'package:flutter_application_fincet/misCuentas.dart';
 

@@ -4,7 +4,6 @@ import 'package:flutter_application_fincet/login.dart';
 void main() {
   runApp(const Fincet());
 }
-
 class Fincet extends StatelessWidget {
   const Fincet({super.key});
 

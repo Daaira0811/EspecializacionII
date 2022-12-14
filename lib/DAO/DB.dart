@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'package:flutter_application_fincet/models/Cuenta.dart';
-import 'package:flutter_application_fincet/models/Gasto.dart';
+import 'package:flutter_application_fincet/models/Dinero.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../models/Ingreso.dart';
 
 class DB {
 
@@ -30,8 +29,7 @@ class DB {
     getApplicationDocumentsDirectory();
 
     String path = join(documentsDirectory.path, _databaseName);
-    print('db location : '+path);
-
+    
     return await openDatabase(path,
       version:_databaseVersion,
       onCreate: _onCreate);
@@ -41,41 +39,32 @@ class DB {
     // SQL code to create Cuenta table
     await db.execute('''  
         CREATE TABLE cuenta (
-          id INTEGER PRIMARY KEY,
+          id INTEGER PRIMARY KEY ,
           nombreCuenta TEXT NOT NULL UNIQUE,
           saldo INTEGER,
           moneda TEXT NOT NULL,
-          color TEXT 
+          color TEXT NOT NULL
          )''');
     // SQL code to create Gasto table
     await db.execute('''  
-        CREATE TABLE gasto (
+        CREATE TABLE dinero (
           id INTEGER PRIMARY KEY ,
-          idCuenta INTEGER,    
+          idCuenta INTEGER ,    
           monto INTEGER,
           asunto TEXT NOT NULL,
-          fechaHora TEXT,    
+          fechaHora TEXT,
+          tipoOperacion TEXT,    
           FOREIGN KEY (idCuenta) REFERENCES cuenta (id)                  
            ON DELETE NO ACTION ON UPDATE NO ACTION
          )''');
 
-     // SQL code to create Ingreso table
-    await db.execute('''  
-        CREATE TABLE ingreso (
-          id INTEGER PRIMARY KEY,
-          idCuenta INTEGER,    
-          monto INTEGER,
-          asunto TEXT NOT NULL,
-          fechaHora TEXT,    
-          FOREIGN KEY (idCuenta) REFERENCES cuenta (id)                  
-           ON DELETE NO ACTION ON UPDATE NO ACTION
-         )''');
+    
   }
 
    Future<Future<int>> insertCuenta(Cuenta cuenta) async {
     Database database = await _initDB();
 
-    return database.insert("cuenta", cuenta.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    return database.insert("cuenta", cuenta.toMap());
   }
 
   static Future<Future<int>> updateCuenta(Cuenta cuenta) async {
@@ -99,59 +88,34 @@ class DB {
      ));
   }
 
- static Future<Future<int>> insertIngreso(Ingreso ingreso) async {
+ static Future<Future<int>> insertDinero(Dinero dinero) async {
     Database database = await _initDB();
 
-    return database.insert("ingreso", ingreso.toMap());
+    return database.insert("dinero", dinero.toMap());
   }
 
-  static Future<Future<int>> updateIngreso(Ingreso ingreso) async {
+  static Future<Future<int>> updateDinero(Dinero dinero) async {
     Database database = await _initDB();
     
-    return database.update("ingreso", ingreso.toMap(), where: "id = ?", whereArgs: [ingreso.id]);
+    return database.update("dinero", dinero.toMap(), where: "id = ?", whereArgs: [dinero.id]);
   }
 
-  static Future<List<Ingreso>> listarIngresos() async {
+  static Future<List<Dinero>> listarDinero() async {
     Database database = await _initDB();
     
-    final List<Map <String, dynamic>> ingresosMap = await database.query("ingreso");
+    final List<Map <String, dynamic>> dineroMap = await database.query("dinero");
 
-    return List.generate(ingresosMap.length,
-     (i) => Ingreso(
-        id: ingresosMap[i]['id'],
-        idCuenta: ingresosMap[i]['idCuenta'],
-        monto: ingresosMap[i]['monto'],
-        asunto: ingresosMap[i]['asunto'],
-        fechaHora:  ingresosMap[i]['fechaHora']
+    return List.generate(dineroMap.length,
+     (i) => Dinero(
+        id: dineroMap[i]['id'],
+        idCuenta: dineroMap[i]['idCuenta'],
+        monto: dineroMap[i]['monto'],
+        asunto: dineroMap[i]['asunto'],
+        fechaHora:  dineroMap[i]['fechaHora'],
+        tipoOperacion: dineroMap[i]['tipoOperacion']
      ));
   }
 
-static Future<Future<int>> insertGasto(Gasto gasto) async {
-    Database database = await _initDB();
-
-    return database.insert("gasto", gasto.toMap());
-  }
-
-  static Future<Future<int>> updateGasto(Gasto gasto) async {
-    Database database = await _initDB();
-    
-    return database.update("gasto", gasto.toMap(), where: "id = ?", whereArgs: [gasto.id]);
-  }
-
-  static Future<List<Gasto>> listarGasto() async {
-    Database database = await _initDB();
-    
-    final List<Map <String, dynamic>> gastosMap = await database.query("gasto");
-
-    return List.generate(gastosMap.length,
-     (i) => Gasto(
-        id: gastosMap[i]['id'],
-        idCuenta: gastosMap[i]['idCuenta'],
-        monto: gastosMap[i]['monto'],
-        asunto: gastosMap[i]['asunto'],
-        fechaHora:  gastosMap[i]['fechaHora']
-     ));
-  }
 
 
 

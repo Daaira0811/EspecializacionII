@@ -1,11 +1,14 @@
+import 'dart:ffi';
+
 class Dinero{
   int? id;
   int? idCuenta;
   int? monto;
   String? asunto;
   String? fechaHora;
+  String? tipoOperacion;
 
-  Dinero({  this.id,  this.idCuenta,  this.monto,  this.asunto,  this.fechaHora});
+  Dinero({  this.id,  this.idCuenta,  this.monto,  this.asunto,  this.fechaHora, this.tipoOperacion});
 
   Map <String, dynamic> toMap(){
     return {
@@ -13,7 +16,8 @@ class Dinero{
       'idCuenta': id,
       'monto':monto,
       'asunto':asunto,
-      'fechaHora':fechaHora
+      'fechaHora':fechaHora,
+      'tipoOperacion':tipoOperacion
       };
   }
 
@@ -24,6 +28,7 @@ class Dinero{
     gasto.monto = map['monto'];
     gasto.asunto = map['asunto'];
     gasto.fechaHora = map['fechaHora'];
+    gasto.tipoOperacion = map['tipoOperacion'];
 
     return gasto;
   }
