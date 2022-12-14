@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter_application_fincet/gastos.dart';
+import 'package:flutter_application_fincet/models/gastos.dart';
 import 'package:flutter_application_fincet/verMasGastos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
@@ -97,8 +97,15 @@ Widget balanceGastos(context) {
       const SizedBox(
         height: 10,
       ), // da espacio entre barrita y balance
+cajaGastos(context)
+    ],
+  );
+}
 
-      TextField(
+Widget cajaGastos(context){
+  int test = -27000;
+  String balance = test.toString()+" CLP";
+return TextField(
         // Caja blanca con balance
         enabled: false,
 
@@ -107,14 +114,14 @@ Widget balanceGastos(context) {
           contentPadding: const EdgeInsets.all(30),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
-          hintText: "- 25.000 CLP",
+          hintText: balance,
           fillColor: const Color.fromARGB(255, 217, 217, 217),
           filled: true,
         ),
-      ),
-    ],
-  );
+      );
 }
+
+
 
 Widget ultimosMovimientos(context) {
   return Column(
@@ -136,22 +143,6 @@ Widget ultimosMovimientos(context) {
           ),
         ],
       ),
-      /*
-      TextField(
-          // Caja blanca con balance
-      enabled: false,
-
-      textAlign: TextAlign.center,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(10),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-        hintStyle: const TextStyle(color: Colors.black, fontSize: 10),
-        hintText: "- 23.000 CLP",
-        fillColor: const Color.fromARGB(255, 217, 217, 217),
-        filled: true,
-      ),
-      )
-      */
       ultimosMovimientosDisplay(context)
     ],
   );
@@ -278,8 +269,8 @@ Widget graficosTexto(context) {
 
 Widget grafico(context) {
   List<Gastos> data = [
-    Gastos(20000, "2", charts.ColorUtil.fromDartColor(Colors.red), "Gasto"),
-    Gastos(5000, "4", charts.ColorUtil.fromDartColor(Colors.red), "Gasto"),
+    Gastos(20000, "2", charts.ColorUtil.fromDartColor(Colors.red)),
+    Gastos(5000, "4", charts.ColorUtil.fromDartColor(Colors.red)),
   ];
 
   List<charts.Series<Gastos, String>> series = [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter_application_fincet/gastos.dart';
+import 'package:flutter_application_fincet/models/gastos.dart';
 import 'package:flutter_application_fincet/verMasGeneral.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
@@ -98,21 +98,26 @@ Widget balanceGastos(context) {
         height: 10,
       ), // da espacio entre barrita y balance
 
-      TextField(
-        // Caja blanca con balance
-        enabled: false,
-
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(30),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
-          hintText: "32.000 CLP",
-          fillColor: const Color.fromARGB(255, 217, 217, 217),
-          filled: true,
-        ),
-      ),
+    cajaGeneral(context)
     ],
+  );
+}
+
+Widget cajaGeneral(context){
+  String balance = "32.000 CLP";
+return TextField(
+    // Caja blanca con balance
+    enabled: false,
+
+    textAlign: TextAlign.center,
+    decoration: InputDecoration(
+      contentPadding: const EdgeInsets.all(30),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+      hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
+      hintText: balance,
+      fillColor: const Color.fromARGB(255, 217, 217, 217),
+      filled: true,
+    ),
   );
 }
 
@@ -278,12 +283,12 @@ Widget graficosTexto(context) {
 
 Widget grafico(context) {
   final List<Gastos> data = [
-    Gastos(15000, "1", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
-    Gastos(7000, "1", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
-    Gastos(20000, "2", charts.ColorUtil.fromDartColor(Colors.red), "Gasto"),
-    Gastos(25000, "3", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
-    Gastos(5000, "4", charts.ColorUtil.fromDartColor(Colors.red), "Gasto"),
-    Gastos(10000, "5", charts.ColorUtil.fromDartColor(Colors.green), "Ingreso"),
+    Gastos(15000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
+    Gastos(7000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
+    Gastos(20000, "2", charts.ColorUtil.fromDartColor(Colors.red)),
+    Gastos(25000, "3", charts.ColorUtil.fromDartColor(Colors.green)),
+    Gastos(5000, "4", charts.ColorUtil.fromDartColor(Colors.red)),
+    Gastos(10000, "5", charts.ColorUtil.fromDartColor(Colors.green)),
   ];
 
   List<charts.Series<Gastos, String>> series = [

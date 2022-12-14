@@ -6,13 +6,13 @@ class Gastos {
   final int dinero;
   final String dias;
   final charts.Color barColor;
-  final String tipo;
+  
 
   Gastos(
     this.dinero,
     this.dias,
     this.barColor, 
-    this.tipo
+    
     
   );
 }
