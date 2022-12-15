@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/DAO/DB.dart';
 import 'package:flutter_application_fincet/agregarCuenta.dart';
-import 'package:flutter_application_fincet/models/ChartTest.dart';
+import 'package:flutter_application_fincet/models/Chart.dart';
 import 'package:flutter_application_fincet/models/Dinero.dart';
 import 'package:flutter_application_fincet/verMasGastos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
@@ -133,8 +133,8 @@ Widget cuerpo(context) {
                     botonEntrar(context),
                   ],
                 ),
-                graficosTexto(context),
-                Container(height: 220, width: 700, child: grafico(context))
+                // graficosTexto(context),
+                // Container(height: 220, width: 700, child: grafico(context))
               ],
             ),
           ),
@@ -196,7 +196,7 @@ Widget cajaGastos(context, List<Dinero> data) {
       print(montoTotal);
     }
   int test = montoTotal;
-  String balance = test.toString() + " CLP";
+  String balance = "- "+test.toString() + " CLP";
   return TextField(
     // Caja blanca con balance
     enabled: false,
@@ -355,39 +355,39 @@ Widget botonEntrar(context) {
       ));
 }
 
-Widget graficosTexto(context) {
-  return Row(
-    children: const [
-      Text(
-        // texto de ultimos movimientos
-        textAlign: TextAlign.left,
-        "Graficos",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ],
-  );
-}
+// Widget graficosTexto(context) {
+//   return Row(
+//     children: const [
+//       Text(
+//         // texto de ultimos movimientos
+//         textAlign: TextAlign.left,
+//         "Graficos",
+//         style: TextStyle(
+//           color: Colors.white,
+//           fontSize: 15,
+//           fontWeight: FontWeight.bold,
+//         ),
+//       ),
+//     ],
+//   );
+// }
 
-Widget grafico(context) {
-  List<ChartTest> data = [
-    ChartTest(20000, "2", charts.ColorUtil.fromDartColor(Colors.red)),
-    ChartTest(5000, "4", charts.ColorUtil.fromDartColor(Colors.red)),
-  ];
+// Widget grafico(context) {
+//   List<ChartTest> data = [
+//     ChartTest(20000, "2", charts.ColorUtil.fromDartColor(Colors.red)),
+//     ChartTest(5000, "4", charts.ColorUtil.fromDartColor(Colors.red)),
+//   ];
 
-  List<charts.Series<ChartTest, String>> series = [
-    charts.Series(
-        id: "Gastos",
-        data: data,
-        domainFn: (ChartTest, index) => ChartTest.dias,
-        measureFn: (ChartTest, index) => ChartTest.dinero,
-        colorFn: (ChartTest, index) => ChartTest.barColor)
-  ];
-  return charts.BarChart(
-    series,
-    animate: true,
-  );
-}
+//   List<charts.Series<ChartTest, String>> series = [
+//     charts.Series(
+//         id: "Gastos",
+//         data: data,
+//         domainFn: (ChartTest, index) => ChartTest.dias,
+//         measureFn: (ChartTest, index) => ChartTest.dinero,
+//         colorFn: (ChartTest, index) => ChartTest.barColor)
+//   ];
+//   return charts.BarChart(
+//     series,
+//     animate: true,
+//   );
+// }

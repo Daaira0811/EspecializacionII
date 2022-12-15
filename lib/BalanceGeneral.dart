@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/agregarCuenta.dart';
+import 'package:flutter_application_fincet/balanceGastos.dart';
 import 'package:flutter_application_fincet/models/Dinero.dart';
 import 'package:flutter_application_fincet/verMasGeneral.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
 import 'DAO/DB.dart';
 import 'models/Chart.dart';
+import 'models/Cuenta.dart';
 import 'models/Dinero.dart';
 
 class BalanceGeneral extends StatefulWidget {
@@ -55,7 +57,6 @@ class _BalanceGeneralState extends State<BalanceGeneral> {
 
 Widget cuerpo(context) {
   return ListView(
-    shrinkWrap: true,
     children: [
       Container(
         color: const Color.fromARGB(255, 46, 46, 46),
@@ -68,7 +69,7 @@ Widget cuerpo(context) {
                 FutureBuilder(
                     future: ListaDinero(),
                     builder: (ctx, snapshot) {
-                      // Checking if future is resolved+
+                      // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {
                         // If we got an error
                         if (snapshot.hasError) {
@@ -78,43 +79,64 @@ Widget cuerpo(context) {
                               style: TextStyle(fontSize: 18),
                             ),
                           );
+
                           // if we got our data
                         } else if (snapshot.hasData) {
                           // Extracting data from snapshot object
                           final List<Dinero> data =
                               snapshot.data as List<Dinero>;
                           return Center(
-                            child: (Column(
-                              children: [
-                                balanceGastos(context, data),
-                                ultimosMovimientos(context, data),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    botonEntrar(context),
-                                  ],
-                                ),
-                                //graficosTexto(context),
-                                //   Container(
-                                //       height: 220,
-                                //       width: 700,
-                                //       child: //grafico(context, data))
-                              ],
-                            )),
-                          );
+                              child: (Column(
+                            children: [
+                              FutureBuilder(
+                                  future: ListaCuentas(),
+                                  builder: (ctx, snapshot) {
+                                    // Checking if future is resolved
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      // If we got an error
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                            '${snapshot.error} occurred',
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        );
+
+                                        // if we got our data
+                                      } else if (snapshot.hasData) {
+                                        // Extracting data from snapshot object
+                                        final List<Cuenta> dataCuentas =
+                                            snapshot.data as List<Cuenta>;
+                                        return Center(
+                                            child: (Column(
+                                          children: [
+                                            //  ultimosMovimientos(context, data, cuentas)
+                                            balanceGastos(context, data),
+                                            ultimosMovimientos(
+                                                context, data, dataCuentas)
+                                          ],
+                                        )));
+                                      }
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  })
+                            ],
+                          )));
                         }
                       }
                       return Center(
                         child: CircularProgressIndicator(),
                       );
                     }),
-
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: [
-                //     botonEntrar(context),
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    botonEntrar(context),
+                  ],
+                ),
                 // graficosTexto(context),
                 // Container(height: 220, width: 700, child: grafico(context))
               ],
@@ -188,7 +210,7 @@ Widget cajaGeneral(context, int data) {
   );
 }
 
-Widget ultimosMovimientos(context, List<Dinero> data) {
+Widget ultimosMovimientos(context, List<Dinero> data,List<Cuenta> dataCuentas) {
   return Column(
     children: [
       const SizedBox(
@@ -208,24 +230,31 @@ Widget ultimosMovimientos(context, List<Dinero> data) {
           ),
         ],
       ),
-      ultimosMovimientosDisplay(context, data)
+      ultimosMovimientosDisplay(context, data,dataCuentas)
     ],
   );
 }
 
-Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
+String buscarCuenta(List<Cuenta> dataCuentas, int index) {
+  String nombreCuenta = '';
+  for (Cuenta i in dataCuentas)
+    if (index == int.parse(i.id.toString())) {
+      return nombreCuenta = i.nombreCuenta.toString();
+    }
+  ;
+  return nombreCuenta;
+}
+
+Widget ultimosMovimientosDisplay(context, List<Dinero> data, List<Cuenta> dataCuentas) {
   List<Dinero> reverso = data.reversed.toList();
 
-  final List<String> cuenta = <String>[
-    "Banco Santander",
-    "Efectivo",
-  ];
+
 
   return ListView.separated(
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
 
-    itemCount: 2, // cantidad de ultimos movimientos
+    itemCount: 3, // cantidad de ultimos movimientos
     itemBuilder: (BuildContext context, int index) {
       return Card(
         //Caja ultimos movimientos
@@ -271,7 +300,8 @@ Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
                 Row(
                   children: [
                     // Cuenta del gasto
-                    Text(cuenta[index],
+                    Text(
+                      buscarCuenta(dataCuentas, int.parse(reverso[index].idCuenta.toString())),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,

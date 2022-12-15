@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter_application_fincet/models/ChartTest.dart';
+
 import 'package:flutter_application_fincet/verMasIngresos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 import 'package:flutter_application_fincet/DAO/DB.dart';
+import 'models/Chart.dart';
+import 'models/Cuenta.dart';
 import 'models/Dinero.dart';
 
 class BalanceIngresos extends StatefulWidget {
@@ -31,6 +33,7 @@ class _BalanceIngresos extends State<BalanceIngresos> {
   @override
  Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 46, 46, 46),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 96, 95, 95),
@@ -49,8 +52,8 @@ class _BalanceIngresos extends State<BalanceIngresos> {
 
 Widget cuerpo(context) {
   return ListView(
-    children: 
-      [Container(
+    children: [
+      Container(
         color: const Color.fromARGB(255, 46, 46, 46),
         child: Center(
           child: Padding(
@@ -60,46 +63,77 @@ Widget cuerpo(context) {
               children: [
                 FutureBuilder(
                     future: listaIngresos(),
-                    builder: (ctx, snapshot){
+                    builder: (ctx, snapshot) {
                       // Checking if future is resolved
                       if (snapshot.connectionState == ConnectionState.done) {
-                      // If we got an error
+                        // If we got an error
                         if (snapshot.hasError) {
-                        return Center(
-                          child: Text(
-                          '${snapshot.error} occurred',
-                          style: TextStyle(fontSize: 18),
-                          ),
-                        );
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
 
-                      // if we got our data
+                          // if we got our data
                         } else if (snapshot.hasData) {
-                        // Extracting data from snapshot object
-                        final List<Dinero> data =
-                          snapshot.data as List<Dinero>;
-                        return Center(
-                          child: (Column(
-                          children: [
-                            balanceGastos(context, data),
-                            ultimosMovimientos(context, data)
-                          ],
-                        )));
+                          // Extracting data from snapshot object
+                          final List<Dinero> data =
+                              snapshot.data as List<Dinero>;
+                          return Center(
+                              child: (Column(
+                            children: [
+                              FutureBuilder(
+                                  future: ListaCuentas(),
+                                  builder: (ctx, snapshot) {
+                                    // Checking if future is resolved
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      // If we got an error
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                            '${snapshot.error} occurred',
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        );
+
+                                        // if we got our data
+                                      } else if (snapshot.hasData) {
+                                        // Extracting data from snapshot object
+                                        final List<Cuenta> dataCuentas =
+                                            snapshot.data as List<Cuenta>;
+                                        return Center(
+                                            child: (Column(
+                                          children: [
+                                            //  ultimosMovimientos(context, data, cuentas)
+                                            balanceGastos(context, data),
+                                            ultimosMovimientos(
+                                                context, data, dataCuentas)
+                                          ],
+                                        )));
+                                      }
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  })
+                            ],
+                          )));
                         }
                       }
                       return Center(
                         child: CircularProgressIndicator(),
-                        );
-                      }),
-
+                      );
+                    }),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     botonEntrar(context),
                   ],
                 ),
-                
-                graficosTexto(context),
-                Container(height: 220, width: 700,child: grafico(context))
+                // graficosTexto(context),
+                // Container(height: 220, width: 700, child: grafico(context))
               ],
             ),
           ),
@@ -108,7 +142,6 @@ Widget cuerpo(context) {
     ],
   );
 }
-
 listaIngresos() async{
   List <Dinero> list = await DB.listarIngresos();
 
@@ -168,7 +201,7 @@ return TextField(
   );
 }
 
-Widget ultimosMovimientos(context, List <Dinero> data) {
+Widget ultimosMovimientos(context, List <Dinero> data, List<Cuenta> dataCuentas) {
   return Column(
     children: [
       const SizedBox(
@@ -204,14 +237,28 @@ Widget ultimosMovimientos(context, List <Dinero> data) {
       ),
       )
       */
-      ultimosMovimientosDisplay(context,data)
+      ultimosMovimientosDisplay(context,data,dataCuentas)
     ],
   );
 }
+String buscarCuenta(List<Cuenta> dataCuentas, int index) {
+  String nombreCuenta = '';
+  for (Cuenta i in dataCuentas)
+    if (index == int.parse(i.id.toString())) {
+      return nombreCuenta = i.nombreCuenta.toString();
+    }
+  ;
+  return nombreCuenta;
+}
 
-Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
+Widget ultimosMovimientosDisplay(context, List<Dinero> data,List<Cuenta> dataCuentas) {
+  
+  
+  
+  
   final List<String> cuenta = <String>[
     "Banco Santander",
+    "Efectivo",
     "Efectivo",
   ];
 
@@ -220,7 +267,7 @@ Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
   return ListView.separated(
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
-    itemCount: 2,
+    itemCount: 3,
     itemBuilder: (BuildContext context, int index) {
       return Card( //Caja ultimos movimientos
         color: const Color.fromARGB(255, 96, 95, 95),
@@ -265,7 +312,7 @@ Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
                 Row(
                   children: [
                     // Cuenta del gasto
-                    Text(cuenta[index],
+                    Text(buscarCuenta(dataCuentas, int.parse(reverso[index].idCuenta.toString())),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -323,20 +370,20 @@ Widget graficosTexto(context){
 
 Widget grafico(context) {
 
-  List<ChartTest> data = [
-    ChartTest(15000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
+  List<Chart> data = [
+    Chart(15000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
    
-    ChartTest(25000, "3", charts.ColorUtil.fromDartColor(Colors.green)),
-    ChartTest(10000, "5", charts.ColorUtil.fromDartColor(Colors.green)),
+    Chart(25000, "3", charts.ColorUtil.fromDartColor(Colors.green)),
+    Chart(10000, "5", charts.ColorUtil.fromDartColor(Colors.green)),
   ];
   
-  List<charts.Series<ChartTest, String>> series = [
+  List<charts.Series<Chart, String>> series = [
     charts.Series(
         id: "Gastos",
         data: data,
-        domainFn: (ChartTest, index) => ChartTest.dias,
-        measureFn: (ChartTest, index) => ChartTest.dinero,
-        colorFn: (ChartTest, index) => ChartTest.barColor)
+        domainFn: (Chart, index) => Chart.dias,
+        measureFn: (Chart, index) => Chart.dinero,
+        colorFn: (Chart, index) => Chart.barColor)
   ];
   return charts.BarChart(
     series,
