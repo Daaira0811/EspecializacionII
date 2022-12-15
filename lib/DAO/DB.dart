@@ -132,4 +132,20 @@ class DB {
         ));
   }
 
-}
+   static Future<List<Dinero>> listarGastos() async {
+        Database database = await _initDB();
+
+    final List<Map <String, dynamic>> ingresosMap = await database.query("dinero", where: "tipoOperacion=?", whereArgs: ["esGasto"]);
+
+    return List.generate(ingresosMap.length,
+            (i) => Dinero(
+            id: ingresosMap[i]['id'],
+            idCuenta: ingresosMap[i]['idCuenta'],
+            monto: ingresosMap[i]['monto'],
+            asunto: ingresosMap[i]['asunto'],
+            fechaHora:  ingresosMap[i]['fechaHora'],
+            tipoOperacion: ingresosMap[i]['tipoOperacion']
+        ));
+  }
+
+} 

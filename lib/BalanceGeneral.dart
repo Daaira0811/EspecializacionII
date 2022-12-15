@@ -326,9 +326,9 @@ Widget graficosTexto(context) {
 Widget grafico(context, List<Dinero> data1) {
 
 
-  DateTime dt = DateTime.parse(data1[0].fechaHora.toString());
-  print(dt.day);
-  List<Dinero> dataGrafico = data1.toList();
+ // DateTime dt = DateTime.parse(data1[0].fechaHora.toString());
+ // print(dt.day);
+ // List<Dinero> dataGrafico = data1.toList();
 
 
  

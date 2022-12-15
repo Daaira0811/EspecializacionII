@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter_application_fincet/misCuentas.dart';
 
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
 import 'DAO/DB.dart';
+import 'models/Cuenta.dart';
 import 'models/Dinero.dart';
 
 class VerMasGastos extends StatefulWidget {
@@ -16,6 +18,7 @@ class VerMasGastos extends StatefulWidget {
 class _VerMasGastosState extends State<VerMasGastos> {
   int index = 0;
   NavBar? myNavBar;
+
   @override
   void initState() {
     myNavBar = NavBar(currentIndex: (i) {
@@ -29,6 +32,7 @@ class _VerMasGastosState extends State<VerMasGastos> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 46, 46, 46),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 96, 95, 95),
@@ -77,7 +81,44 @@ Widget cuerpo(context) {
                               snapshot.data as List<Dinero>;
                           return Center(
                               child: (Column(
-                            children: [ultimosMovimientos(context, data)],
+                            children: [
+                              FutureBuilder(
+                                  future: ListaCuentas(),
+                                  builder: (ctx, snapshot) {
+                                    // Checking if future is resolved
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      // If we got an error
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                            '${snapshot.error} occurred',
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        );
+
+                                        // if we got our data
+                                      } else if (snapshot.hasData) {
+                                        // Extracting data from snapshot object
+                                        final List<Cuenta> dataCuentas =
+                                            snapshot.data as List<Cuenta>;
+                                        return Center(
+                                            child: (Column(
+                                          children: [
+                                            //  ultimosMovimientos(context, data, cuentas)
+                                            ultimosMovimientos(
+                                                context, data, dataCuentas)
+                                          ],
+                                        )));
+                                      }
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  })
+                              //  ultimosMovimientos(context, data, cuentas)
+                              // ultimosMovimientos(context, data)
+                            ],
                           )));
                         }
                       }
@@ -85,7 +126,6 @@ Widget cuerpo(context) {
                         child: CircularProgressIndicator(),
                       );
                     }),
-
                 //  ultimosMovimientos(context),
               ],
             ),
@@ -97,7 +137,7 @@ Widget cuerpo(context) {
 }
 
 ListaGastos() async {
-  List<Dinero> list = await DB.listarDinero();
+  List<Dinero> list = await DB.listarGastos();
   //Cuenta a=list[0];
   list.forEach((element) {
     print(element.monto);
@@ -105,7 +145,18 @@ ListaGastos() async {
   return list.toList();
 }
 
-Widget ultimosMovimientos(context, List<Dinero> data) {
+Future<List<String>> listaCuentas() async {
+  List<String> nombreCuenta = [];
+  List<Cuenta> cuentas = await DB.listarCuentas();
+  cuentas.forEach((element) {
+    print(element.nombreCuenta);
+    nombreCuenta.add(element.nombreCuenta.toString());
+  });
+  return nombreCuenta;
+}
+
+Widget ultimosMovimientos(
+    context, List<Dinero> data, List<Cuenta> dataCuentas) {
   return Column(
     children: [
       const SizedBox(
@@ -125,37 +176,28 @@ Widget ultimosMovimientos(context, List<Dinero> data) {
           ),
         ],
       ),
-      ultimosMovimientosDisplay(context, data)
+      ultimosMovimientosDisplay(context, data, dataCuentas)
     ],
   );
 }
 
-Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
-  final List<String> cuenta = <String>[
-    "Banco Santander",
-    "Efectivo",
-    "Banco Santander",
-    "Efectivo",
-    "Banco Santander",
-    "Banco Santander",
-    "Efectivo",
-    "Banco Santander",
-    "Efectivo",
-    "Banco Santander",
-    "Banco Santander",
-    "Efectivo",
-    "Banco Santander",
-    "Efectivo",
-    "Banco Santander",
-  ];
+String buscarCuenta(List<Cuenta> dataCuentas, int index) {
+  String nombreCuenta = '';
+  for (Cuenta i in dataCuentas)
+    if (index == int.parse(i.id.toString())) {
+      return nombreCuenta = i.nombreCuenta.toString();
+    };
+  return nombreCuenta;
+}
 
+Widget ultimosMovimientosDisplay(
+    context, List<Dinero> data, List<Cuenta> dataCuentas) {
   List<Dinero> reverseData = data.reversed.toList();
 
   return ListView.separated(
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
-    itemCount: data.length - 1,
-    reverse: true,
+    itemCount: data.length,
     itemBuilder: (BuildContext context, int index) {
       return Card(
         //Caja ultimos movimientos
@@ -201,7 +243,9 @@ Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
                 Row(
                   children: [
                     // Cuenta del gasto
-                    Text(cuenta[index],
+                    Text(buscarCuenta(dataCuentas, int.parse(reverseData[index].idCuenta.toString())),
+                        // listaCuentas(
+                        //     int.parse(reverseData[index].idCuenta.toString())),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,

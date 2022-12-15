@@ -109,7 +109,7 @@ Widget cuerpo(context) {
 }
 
 ListaGastos() async {
-  List<Dinero> list = await DB.listarDinero();
+  List<Dinero> list = await DB.listarGastos();
   //Cuenta a=list[0];
   list.forEach((element) {
     print(element.monto);
@@ -194,19 +194,17 @@ Widget ultimosMovimientos(context, List<Dinero> data) {
 }
 
 Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
- 
   final List<String> cuenta = <String>[
     "Banco Santander",
     "Efectivo",
   ];
- 
+
   List<Dinero> reverseData = data.reversed.toList();
 
   return ListView.separated(
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
     itemCount: 2,
-    reverse: true,
     itemBuilder: (BuildContext context, int index) {
       return Card(
         //Caja ultimos movimientos
