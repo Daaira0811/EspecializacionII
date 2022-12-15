@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter_application_fincet/agregarCuenta.dart';
 import 'package:flutter_application_fincet/models/Dinero.dart';
 import 'package:flutter_application_fincet/models/ChartTest.dart';
 import 'package:flutter_application_fincet/verMasGeneral.dart';
@@ -9,8 +10,6 @@ import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 import 'DAO/DB.dart';
 import 'models/Dinero.dart';
 
-
-
 class BalanceGeneral extends StatefulWidget {
   const BalanceGeneral({super.key});
 
@@ -19,10 +18,8 @@ class BalanceGeneral extends StatefulWidget {
 }
 
 class _BalanceGeneralState extends State<BalanceGeneral> {
-
   late DB db = DB.instance;
-  
-  
+
   int index = 0;
   NavBar? myNavBar;
   @override
@@ -65,16 +62,59 @@ Widget cuerpo(context) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                balanceGastos(context),
-                ultimosMovimientos(context),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    botonEntrar(context),
-                  ],
-                ),
-                graficosTexto(context),
-                Container(height: 220, width: 700, child: grafico(context))
+                FutureBuilder(
+                    future: ListaDinero(),
+                    builder: (ctx, snapshot) {
+                      // Checking if future is resolved+
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          final List<Dinero> data =
+                              snapshot.data as List<Dinero>;
+                          return Center(
+                            child: (Column(
+                              children: [
+                                balanceGastos(context, data),
+                                ultimosMovimientos(context, data),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    botonEntrar(context),
+                                  ],
+                                ),
+                                graficosTexto(context),
+                                Container(
+                                    height: 220,
+                                    width: 700,
+                                    child: grafico(context, data))
+                              ],
+                            )),
+                          );
+                        }
+                       
+                      }
+                      return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                    }),
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     botonEntrar(context),
+                //   ],
+                // ),
+                // graficosTexto(context),
+                // Container(height: 220, width: 700, child: grafico(context))
               ],
             ),
           ),
@@ -84,7 +124,20 @@ Widget cuerpo(context) {
   );
 }
 
-Widget balanceGastos(context) {
+ListaDinero() async {
+  List<Dinero> list = await DB.listarDinero();
+  //Cuenta a=list[0];
+  list.forEach((element) {
+    print(element.monto);
+  });
+  return list.toList();
+}
+
+Widget balanceGastos(context, List<Dinero> data) {
+  int balance = 0;
+  for (var i = 0; i < data.length; i++) {
+    balance += data[i].monto!;
+  }
   return Column(
     children: [
       const Text(
@@ -106,14 +159,14 @@ Widget balanceGastos(context) {
         height: 10,
       ), // da espacio entre barrita y balance
 
-    cajaGeneral(context)
+      cajaGeneral(context, balance)
     ],
   );
 }
 
-Widget cajaGeneral(context){
-  String balance = "32.000 CLP";
-return TextField(
+Widget cajaGeneral(context, int data) {
+  String balance = data.toString();
+  return TextField(
     // Caja blanca con balance
     enabled: false,
 
@@ -122,14 +175,14 @@ return TextField(
       contentPadding: const EdgeInsets.all(30),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
       hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
-      hintText: balance,
+      hintText: balance+" CLP",
       fillColor: const Color.fromARGB(255, 217, 217, 217),
       filled: true,
     ),
   );
 }
 
-Widget ultimosMovimientos(context) {
+Widget ultimosMovimientos(context, List<Dinero> data) {
   return Column(
     children: [
       const SizedBox(
@@ -149,45 +202,27 @@ Widget ultimosMovimientos(context) {
           ),
         ],
       ),
-      /*
-      TextField(
-          // Caja blanca con balance
-      enabled: false,
-
-      textAlign: TextAlign.center,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(10),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-        hintStyle: const TextStyle(color: Colors.black, fontSize: 10),
-        hintText: "- 23.000 CLP",
-        fillColor: const Color.fromARGB(255, 217, 217, 217),
-        filled: true,
-      ),
-      )
-      */
-      ultimosMovimientosDisplay(context)
+      
+      ultimosMovimientosDisplay(context,data)
     ],
   );
 }
 
-Widget ultimosMovimientosDisplay(context) {
-  final List<String> categoriaGasto = <String>[
-    'Trabajo',
-    'Trabajo',
-  ];
+Widget ultimosMovimientosDisplay(context,List<Dinero> data) {
+
+  List<Dinero> reverso = data.reversed.toList();
+  
   final List<String> cuenta = <String>[
     "Banco Santander",
     "Efectivo",
   ];
-  final List<String> valor = <String>[
-    "15.000 CLP",
-    "7.000 CLP",
-  ];
+ 
 
   return ListView.separated(
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
-    itemCount: categoriaGasto.length,
+    
+    itemCount: 2,  // cantidad de ultimos movimientos
     itemBuilder: (BuildContext context, int index) {
       return Card(
         //Caja ultimos movimientos
@@ -216,7 +251,7 @@ Widget ultimosMovimientosDisplay(context) {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Text(categoriaGasto[index],
+                  child: Text(reverso[index].asunto.toString(),
                       style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -228,7 +263,7 @@ Widget ultimosMovimientosDisplay(context) {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 // Gasto
-                Text(valor[index],
+                Text(reverso[index].monto.toString(),
                     style: const TextStyle(fontSize: 12, color: Colors.white)),
                 Row(
                   children: [
@@ -253,7 +288,6 @@ Widget ultimosMovimientosDisplay(context) {
 
 Widget botonEntrar(context) {
   return TextButton(
-    
       style: TextButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         foregroundColor: Colors.black,
@@ -289,7 +323,17 @@ Widget graficosTexto(context) {
   );
 }
 
-Widget grafico(context) {
+Widget grafico(context, List<Dinero> data1) {
+
+
+  DateTime dt = DateTime.parse(data1[0].fechaHora.toString());
+  print(dt.day);
+  List<Dinero> dataGrafico = data1.toList();
+
+
+ 
+
+
   final List<ChartTest> data = [
     ChartTest(15000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
     ChartTest(7000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
