@@ -35,6 +35,7 @@ class _BalanceGastos extends State<BalanceGastos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 46, 46, 46),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 96, 95, 95),
@@ -250,78 +251,88 @@ String buscarCuenta(List<Cuenta> dataCuentas, int index) {
 
 Widget ultimosMovimientosDisplay(
     context, List<Dinero> data, List<Cuenta> dataCuentas) {
- 
-
   List<Dinero> reverseData = data.reversed.toList();
-
-  return ListView.separated(
-    shrinkWrap: true,
-    padding: const EdgeInsets.all(8),
-    itemCount: 2,
-    reverse: true,
-    itemBuilder: (BuildContext context, int index) {
-      return Card(
-        //Caja ultimos movimientos
-        color: const Color.fromARGB(255, 96, 95, 95),
-        borderOnForeground: true,
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15), left: Radius.zero)),
-        margin: const EdgeInsets.all(10),
-        child: InkWell(
-            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          ListTile(
-            // Icono de ultimos movimientos
-            leading: Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(top: 15, left: 10),
-                  child: Icon(Icons.add_circle_rounded),
-                )
-              ],
-            ),
-            title: Column(
-              // Categoria del gasto
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text(reverseData[index].asunto.toString(),
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
-                )
-              ],
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // Gasto
-                Text("- " + reverseData[index].monto.toString(),
-                    style: const TextStyle(fontSize: 12, color: Colors.white)),
-                Row(
-                  children: [
-                    // Cuenta del gasto
-                    Text(
-                        buscarCuenta(dataCuentas,
-                            int.parse(reverseData[index].idCuenta.toString())),
+  if (reverseData.isNotEmpty) {
+    return ListView.separated(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      itemCount: 2,
+      reverse: true,
+      itemBuilder: (BuildContext context, int index) {
+        return Card(
+          //Caja ultimos movimientos
+          color: const Color.fromARGB(255, 96, 95, 95),
+          borderOnForeground: true,
+          elevation: 10,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.horizontal(
+                  right: Radius.circular(15), left: Radius.zero)),
+          margin: const EdgeInsets.all(10),
+          child: InkWell(
+              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            ListTile(
+              // Icono de ultimos movimientos
+              leading: Column(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(top: 15, left: 10),
+                    child: Icon(Icons.add_circle_rounded),
+                  )
+                ],
+              ),
+              title: Column(
+                // Categoria del gasto
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(reverseData[index].asunto.toString(),
                         style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        )),
-                  ],
-                )
-              ],
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                  )
+                ],
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // Gasto
+                  Text("- " + reverseData[index].monto.toString(),
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.white)),
+                  Row(
+                    children: [
+                      // Cuenta del gasto
+                      Text(
+                          buscarCuenta(
+                              dataCuentas,
+                              int.parse(
+                                  reverseData[index].idCuenta.toString())),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          )),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ])),
+          ])),
+        );
+      },
+      separatorBuilder: (context, int index) => const Divider(),
+    );
+    }else{
+      return Padding(
+        padding: const EdgeInsets.only(top: 10,left: 10),
+        child:Text(
+            "No hay movimientos",
+            style: TextStyle(color: Colors.white)) ,
       );
-    },
-    separatorBuilder: (context, int index) => const Divider(),
-  );
+
+  }
 }
 
 Widget botonEntrar(context) {

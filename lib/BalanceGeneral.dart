@@ -135,9 +135,13 @@ ListaDinero() async {
 
 Widget balanceGastos(context, List<Dinero> data) {
   int balance = 0;
-  for (var i = 0; i < data.length; i++) {
-    balance += data[i].monto!;
-  }
+  data.forEach((element) {
+    if (element.tipoOperacion == 'esGasto') {
+      balance += int.parse(element.monto.toString()) * -1;
+    }else{
+      balance += element.monto!;
+    }
+  });
   return Column(
     children: [
       const Text(
