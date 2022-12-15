@@ -4,6 +4,8 @@ import 'package:flutter_application_fincet/models/ChartTest.dart';
 import 'package:flutter_application_fincet/verMasIngresos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
+import 'package:flutter_application_fincet/DAO/DB.dart';
+import 'models/Dinero.dart';
 
 class BalanceIngresos extends StatefulWidget {
   const BalanceIngresos({super.key});
@@ -56,8 +58,39 @@ Widget cuerpo(context) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                balanceGastos(context),
-                ultimosMovimientos(context),
+                FutureBuilder(
+                    future: listaIngresos(),
+                    builder: (ctx, snapshot){
+                      // Checking if future is resolved
+                      if (snapshot.connectionState == ConnectionState.done) {
+                      // If we got an error
+                        if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                          '${snapshot.error} occurred',
+                          style: TextStyle(fontSize: 18),
+                          ),
+                        );
+
+                      // if we got our data
+                        } else if (snapshot.hasData) {
+                        // Extracting data from snapshot object
+                        final List<Dinero> data =
+                          snapshot.data as List<Dinero>;
+                        return Center(
+                          child: (Column(
+                          children: [
+                            balanceGastos(context, data),
+                            ultimosMovimientos(context, data)
+                          ],
+                        )));
+                        }
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                        );
+                      }),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -76,34 +109,49 @@ Widget cuerpo(context) {
   );
 }
 
-Widget balanceGastos(context) {
-  return Column(
-    children: [
-  const Text(
-    // texto de balance gastos
-    "Balance ingresos",
-    style: TextStyle(
-      color: Colors.white,
-      fontSize: 25,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
+listaIngresos() async{
+  List <Dinero> list = await DB.listarIngresos();
 
-  const Divider(
-    // barrita blanca que separa
-    color: Colors.white,
-    thickness: 3,
-  ),
-  const SizedBox(
-    height: 10,
-  ), // da espacio entre barrita y balance
-    cajaIngreso(context)
- 
-    ],
-  );
+  return list.toList();
+
 }
-Widget cajaIngreso(context){
-  String balance = "57.000 CLP";
+
+Widget balanceGastos(context, List<Dinero> data) {
+  return Container(
+    child:Column(
+
+      children: [
+        const Text(
+          // texto de balance gastos
+          "Balance ingresos",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        const Divider(
+          // barrita blanca que separa
+          color: Colors.white,
+          thickness: 3,
+        ),
+        const SizedBox(
+          height: 10,
+        ), // da espacio entre barrita y balance
+        cajaIngreso(context,data)
+
+      ],
+    )
+  );
+
+
+}
+Widget cajaIngreso(context, List<Dinero> data){
+  int balance = 0;
+
+  data.forEach((element) { balance += element.monto!; });
+
 return TextField(
     // Caja blanca con balance
     enabled: false,
@@ -113,14 +161,14 @@ return TextField(
       contentPadding: const EdgeInsets.all(30),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
       hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
-      hintText: balance,
+      hintText: "$balance" + " CLP",
       fillColor: const Color.fromARGB(255, 217, 217, 217),
       filled: true,
     ),
   );
 }
 
-Widget ultimosMovimientos(context) {
+Widget ultimosMovimientos(context, List <Dinero> data) {
   return Column(
     children: [
       const SizedBox(
@@ -156,29 +204,23 @@ Widget ultimosMovimientos(context) {
       ),
       )
       */
-      ultimosMovimientosDisplay(context)
+      ultimosMovimientosDisplay(context,data)
     ],
   );
 }
 
-Widget ultimosMovimientosDisplay(context) {
-  final List<String> categoriaGasto = <String>[
-    'Trabajo',
-    'Regalo',
-  ];
+Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
   final List<String> cuenta = <String>[
     "Banco Santander",
     "Efectivo",
   ];
-  final List<String> valor = <String>[
-    "15.000 CLP",
-    "25.000 CLP",
-  ];
+
+  List<Dinero> reverso = data.reversed.toList();
 
   return ListView.separated(
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
-    itemCount: categoriaGasto.length,
+    itemCount: 2,
     itemBuilder: (BuildContext context, int index) {
       return Card( //Caja ultimos movimientos
         color: const Color.fromARGB(255, 96, 95, 95),
@@ -206,7 +248,7 @@ Widget ultimosMovimientosDisplay(context) {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Text(categoriaGasto[index],
+                  child: Text(reverso[index].asunto.toString(),
                       style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -218,7 +260,7 @@ Widget ultimosMovimientosDisplay(context) {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 // Gasto
-                Text(valor[index],
+                Text(reverso[index].monto.toString() + " CLP",
                     style: const TextStyle(fontSize: 12, color: Colors.white)),
                 Row(
                   children: [

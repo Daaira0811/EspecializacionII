@@ -100,7 +100,7 @@ class DB {
     return database.update("dinero", dinero.toMap(), where: "id = ?", whereArgs: [dinero.id]);
   }
 
-   Future<List<Dinero>> listarDinero() async {
+   static Future<List<Dinero>> listarDinero() async {
     Database database = await _initDB();
     
     final List<Map <String, dynamic>> dineroMap = await database.query("dinero");
@@ -116,8 +116,20 @@ class DB {
      ));
   }
 
+  static Future<List<Dinero>> listarIngresos() async {
+        Database database = await _initDB();
 
+    final List<Map <String, dynamic>> ingresosMap = await database.query("dinero", where: "tipoOperacion=?", whereArgs: ["esIngreso"]);
 
-
+    return List.generate(ingresosMap.length,
+            (i) => Dinero(
+            id: ingresosMap[i]['id'],
+            idCuenta: ingresosMap[i]['idCuenta'],
+            monto: ingresosMap[i]['monto'],
+            asunto: ingresosMap[i]['asunto'],
+            fechaHora:  ingresosMap[i]['fechaHora'],
+            tipoOperacion: ingresosMap[i]['tipoOperacion']
+        ));
+  }
 
 }
