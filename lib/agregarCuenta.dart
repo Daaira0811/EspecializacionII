@@ -15,7 +15,6 @@ class AgregarCuenta extends StatefulWidget {
 }
 
 
-
 class Data {
   String nombreCuenta = "Nombre1";
   String divisa = 'Divisa1';

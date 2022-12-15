@@ -88,7 +88,7 @@ class DB {
      ));
   }
 
- static Future<Future<int>> insertDinero(Dinero dinero) async {
+  Future<Future<int>> insertDinero(Dinero dinero) async {
     Database database = await _initDB();
 
     return database.insert("dinero", dinero.toMap());
@@ -100,7 +100,7 @@ class DB {
     return database.update("dinero", dinero.toMap(), where: "id = ?", whereArgs: [dinero.id]);
   }
 
-  static Future<List<Dinero>> listarDinero() async {
+   Future<List<Dinero>> listarDinero() async {
     Database database = await _initDB();
     
     final List<Map <String, dynamic>> dineroMap = await database.query("dinero");

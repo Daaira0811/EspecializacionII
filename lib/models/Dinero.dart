@@ -13,7 +13,7 @@ class Dinero{
   Map <String, dynamic> toMap(){
     return {
       'id':id,
-      'idCuenta': id,
+      'idCuenta': idCuenta,
       'monto':monto,
       'asunto':asunto,
       'fechaHora':fechaHora,
