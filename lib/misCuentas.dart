@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_fincet/DAO/DB.dart';
 import 'package:flutter_application_fincet/login.dart';
@@ -14,17 +16,8 @@ class mostrarCuentas extends StatefulWidget {
   State<mostrarCuentas> createState() => _mostrarCuentasState();
 }
 
-class Data {
-  String nombreCuenta = "Nombre1";
-  String divisa = 'Divisa1';
-  double saldo = 0.1;
-
-  Data({required this.nombreCuenta, required this.divisa, required this.saldo});
-}
 
 class _mostrarCuentasState extends State<mostrarCuentas> {
-
-
   int index = 0;
   NavBar? myNavBar;
   @override
@@ -56,22 +49,6 @@ class _mostrarCuentasState extends State<mostrarCuentas> {
       body: cuerpo(context),
       bottomNavigationBar: myNavBar,
       drawer: sideMenu(),
-
-      // bottomNavigationBar:
-      //     BottomNavigationBar(items: const <BottomNavigationBarItem>[
-      //   BottomNavigationBarItem(
-      //     icon: Icon(Icons.home),
-      //     label: 'Home',
-      //   ),
-      //   BottomNavigationBarItem(
-      //     icon: Icon(Icons.add_circle_outline),
-      //     label: 'Agregar',
-      //   ),
-      //   BottomNavigationBarItem(
-      //     icon: Icon(Icons.person),
-      //     label: 'Cuenta',
-      //   ),
-      // ]),
     );
   }
 }
@@ -89,7 +66,38 @@ Widget cuerpo(context) {
             child: Column(
               // shrinkWrap: true,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [titulo(context), misCuentas(context)],
+              children: [
+                titulo(context),
+                FutureBuilder(
+                    future: ListaCuentas(),
+                    builder: (ctx, snapshot) {
+                      // Checking if future is resolved
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
+
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          final List<Cuenta> data =
+                              snapshot.data as List<Cuenta>;
+                          return Center(
+                              child: (Column(
+                            children: [misCuentas(context, data)],
+                          )));
+                        }
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }),
+              ],
             ),
           )));
 }
@@ -107,7 +115,6 @@ Widget titulo(context) {
       ),
     ),
     const Divider(
-      // barrita blanca que separa
       color: Colors.white,
       thickness: 3,
     ),
@@ -117,28 +124,40 @@ Widget titulo(context) {
   ]);
 }
 
-Widget misCuentas(context) {
-  final List<String> banco = <String>[
-    'Banco Santander',
-    'Banco Estado',
-    'Efectivo',
-  ];
-  final List<String> tipo = <String>[
-    "Balance",
-    "Balance",
-    "Balance",
-  ];
-  final List<String> valor = <String>[
-    "120.000 CLP",
-    "48.000 CLP",
-    "22.000 CLP",
-  ];
+ListaCuentas() async {
+  List<Cuenta> list = await DB.listarCuentas();
+  //Cuenta a=list[0];
+  list.forEach((element) {
+    print(element.saldo);
+  });
+  return list.toList();
+}
+
+Widget misCuentas(context, List<Cuenta> data) {
+  for (Cuenta i in data as List)
+    Text(i.nombreCuenta.toString() + '' + i.moneda.toString());
+
+  // final List<String> banco = <String>[
+  //   'Banco Santander',
+  //   'Banco Estado',
+  //   'Efectivo',
+  // ];
+  // final List<String> tipo = <String>[
+  //   "Balance",
+  //   "Balance",
+  //   "Balance",
+  // ];
+  // final List<String> valor = <String>[
+  //   "120.000 CLP",
+  //   "48.000 CLP",
+  //   "22.000 CLP",
+  // ];
 
   return ListView.separated(
     shrinkWrap: true,
     primary: false,
     padding: const EdgeInsets.all(12),
-    itemCount: banco.length,
+    itemCount: data.length,
     itemBuilder: (BuildContext context, int index) {
       return Card(
         color: Colors.white,
@@ -165,7 +184,7 @@ Widget misCuentas(context) {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
-                      child: Text("${banco[index]}",
+                      child: Text(data[index].nombreCuenta.toString(),
                           style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold)),
                     )
@@ -177,12 +196,12 @@ Widget misCuentas(context) {
                     SizedBox(
                       height: 15,
                     ),
-                    Text("${tipo[index]}",
+                    Text("Balance",
                         style: const TextStyle(fontSize: 18)),
                     SizedBox(
                       height: 15,
                     ),
-                    Text("${valor[index]}",
+                    Text(data[index].saldo.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
