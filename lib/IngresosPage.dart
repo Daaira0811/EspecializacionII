@@ -41,6 +41,7 @@ class _IngresosPageState extends State<IngresosPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 46, 46, 46),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 96, 95, 95),

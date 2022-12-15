@@ -61,6 +61,7 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 46, 46, 46),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 96, 95, 95),
@@ -127,24 +128,24 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
     ];
     String? selectedItem = 'Peso Chileno (CLP)';
 
-    Future pickColor(context) => showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-              title: Text('Elige un color'),
-              content: SingleChildScrollView(
-                  child: BlockPicker(
-                pickerColor: pickerColor,
-                onColorChanged: changeColor,
-              )),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(
-                    'Seleccionar',
-                  ),
-                )
-              ]),
-        );
+    // Future pickColor(context) => showDialog(
+    //       context: context,
+    //       builder: (context) => AlertDialog(
+    //           title: Text('Elige un color'),
+    //           content: SingleChildScrollView(
+    //               child: BlockPicker(
+    //             pickerColor: pickerColor,
+    //             onColorChanged: changeColor,
+    //           )),
+    //           actions: <Widget>[
+    //             TextButton(
+    //               onPressed: () => Navigator.of(context).pop(),
+    //               child: Text(
+    //                 'Seleccionar',
+    //               ),
+    //             )
+    //           ]),
+    //     );
     return Container(
       child: Form(
         child: Column(
@@ -254,77 +255,8 @@ class _AgregarCuentaState extends State<AgregarCuenta> {
             }
           }, */
                 ),
-            const Padding(
-                padding: EdgeInsets.only(bottom: 12, top: 30),
-                child: Text(
-                  "Color:",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                )),
-            Row(
-              children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: pickerColor,
-                      onPrimary: Colors.black,
-                      shape: CircleBorder(),
-                    ),
-                    onPressed: () => pickColor(context),
-                    child: Icon(
-                      Icons.add_circle_outline,
-                      size: 41,
-                    )),
-                SizedBox(
-                  width: 15,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.red.shade800,
-                  ),
-                  width: 40,
-                  height: 40,
-                ),
-                SizedBox(
-                  width: 25,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.orange.shade900,
-                  ),
-                  width: 40,
-                  height: 40,
-                ),
-                SizedBox(
-                  width: 25,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.lightBlue,
-                  ),
-                  width: 40,
-                  height: 40,
-                ),
-                SizedBox(
-                  width: 25,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue.shade900,
-                  ),
-                  width: 40,
-                  height: 40,
-                )
-              ],
-            ),
             SizedBox(
-              height: 20,
+              height: 50,
             ),
             Center(
               child: ElevatedButton(

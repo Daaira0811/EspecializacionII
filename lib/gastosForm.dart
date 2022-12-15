@@ -43,6 +43,7 @@ class _gastosFormState extends State<gastosForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 46, 46, 46),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
