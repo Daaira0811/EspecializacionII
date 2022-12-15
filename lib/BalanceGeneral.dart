@@ -37,6 +37,7 @@ class _BalanceGeneralState extends State<BalanceGeneral> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 46, 46, 46),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 96, 95, 95),
@@ -93,20 +94,19 @@ Widget cuerpo(context) {
                                     botonEntrar(context),
                                   ],
                                 ),
-                                graficosTexto(context),
-                                Container(
-                                    height: 220,
-                                    width: 700,
-                                    child: grafico(context, data))
+                                //graficosTexto(context),
+                                //   Container(
+                                //       height: 220,
+                                //       width: 700,
+                                //       child: //grafico(context, data))
                               ],
                             )),
                           );
                         }
-                       
                       }
                       return Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        child: CircularProgressIndicator(),
+                      );
                     }),
 
                 // Row(
@@ -140,7 +140,7 @@ Widget balanceGastos(context, List<Dinero> data) {
   data.forEach((element) {
     if (element.tipoOperacion == 'esGasto') {
       balance += int.parse(element.monto.toString()) * -1;
-    }else{
+    } else {
       balance += element.monto!;
     }
   });
@@ -181,7 +181,7 @@ Widget cajaGeneral(context, int data) {
       contentPadding: const EdgeInsets.all(30),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
       hintStyle: const TextStyle(color: Colors.black, fontSize: 30),
-      hintText: balance+" CLP",
+      hintText: balance + " CLP",
       fillColor: const Color.fromARGB(255, 217, 217, 217),
       filled: true,
     ),
@@ -208,27 +208,24 @@ Widget ultimosMovimientos(context, List<Dinero> data) {
           ),
         ],
       ),
-      
-      ultimosMovimientosDisplay(context,data)
+      ultimosMovimientosDisplay(context, data)
     ],
   );
 }
 
-Widget ultimosMovimientosDisplay(context,List<Dinero> data) {
-
+Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
   List<Dinero> reverso = data.reversed.toList();
-  
+
   final List<String> cuenta = <String>[
     "Banco Santander",
     "Efectivo",
   ];
- 
 
   return ListView.separated(
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
-    
-    itemCount: 2,  // cantidad de ultimos movimientos
+
+    itemCount: 2, // cantidad de ultimos movimientos
     itemBuilder: (BuildContext context, int index) {
       return Card(
         //Caja ultimos movimientos
@@ -330,7 +327,6 @@ Widget graficosTexto(context) {
 }
 
 Widget grafico(context, List<Dinero> data) {
-
   data.forEach((element) {
     if (element.tipoOperacion == 'esGasto') {
       element.monto = element.monto! * -1;
@@ -338,56 +334,78 @@ Widget grafico(context, List<Dinero> data) {
   });
 
   List<Dinero> dataParsed = [];
-  
-  List<Chart> aux = []; 
-  
-  List dias = ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"];
- // Saco solo dia
+
+  List<Chart> aux = [];
+
+  List dias = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31"
+  ];
+  // Saco solo dia
   for (var i = 0; i < data.length; i++) {
-    dataParsed.add(data[i]); 
-    dataParsed[i].fechaHora = data[0].fechaHora.toString().characters.elementAt(0).toString() + data[0].fechaHora.toString().characters.elementAt(1).toString();
+    dataParsed.add(data[i]);
+    dataParsed[i].fechaHora =
+        data[0].fechaHora.toString().characters.elementAt(0).toString() +
+            data[0].fechaHora.toString().characters.elementAt(1).toString();
   }
-  print(dataParsed[1].fechaHora);
+  //print(dataParsed[1].fechaHora);
   //List<Dinero> dataGrafico = data1.toList();
-  
-   
+
   for (var i = 0; i < dias.length; i++) {
-    
-    //  int ptoo = 0;
-      Chart chartAux = Chart(0, "",charts.ColorUtil.fromDartColor(Colors.white) );
-   
-    data.forEach((element) {if (element.fechaHora == dias[i]) {
-      int sumaAux = 0;
-      
+    print('aaaaa');
+    Chart chartAux = Chart(0, "", charts.ColorUtil.fromDartColor(Colors.white));
+    int sumaAux = 0;
+    //  int contador = 0;
+    data.forEach((element) {
+      if (element.fechaHora == dias[i]) {
+        sumaAux += element.monto!;
+        chartAux.dinero = sumaAux;
+        chartAux.dias = dias[i];
+        print("el dia x +" + chartAux.dias);
 
-      sumaAux += element.monto!;
-      chartAux.dinero=sumaAux;
-      chartAux.dias= dias[i];
-      print("el dia x +"+chartAux.dias);
-      
-      if (chartAux.dinero <0) {
-        chartAux.barColor = charts.ColorUtil.fromDartColor(Colors.red);
-      } else if (chartAux.dinero >0) {
-        chartAux.barColor = charts.ColorUtil.fromDartColor(Colors.green);
+        if (chartAux.dinero < 0) {
+          chartAux.barColor = charts.ColorUtil.fromDartColor(Colors.red);
+        } else if (chartAux.dinero > 0) {
+          chartAux.barColor = charts.ColorUtil.fromDartColor(Colors.green);
+        }
+
+        aux.add(chartAux);
+
+        print("Suma total caca " + aux[0].dinero.toString().toString());
+
+        //print("Mondogo peo "+aux[i].dinero);
       }
-      
-      aux.add(chartAux);
-      
-      print("Suma total caca "+aux[0].dinero.toString().toString());
-
-      //print("Mondogo peo "+aux[i].dinero);
-    }});
-    
-     
+    });
   }
-
-
-
-
-  
-    print(" Mondogno peo "+aux.length.toString());
-
-
 
   final List<Chart> dataA = [
     Chart(15000, "1", charts.ColorUtil.fromDartColor(Colors.green)),
@@ -398,16 +416,15 @@ Widget grafico(context, List<Dinero> data) {
     Chart(10000, "5", charts.ColorUtil.fromDartColor(Colors.green)),
   ];
 
-   List a;
-
+  List a;
 
   List<charts.Series<Chart, String>> series = [
     charts.Series(
         id: "Gastos",
         data: aux,
-        domainFn: (Chart, index) => Chart.dias ,
+        domainFn: (Chart, index) => Chart.dias,
         measureFn: (Chart, index) => Chart.dinero,
-        colorFn: (Chart, index) =>  Chart.barColor)
+        colorFn: (Chart, index) => Chart.barColor)
   ];
   return charts.BarChart(
     series,
