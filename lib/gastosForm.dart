@@ -4,6 +4,10 @@ import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
+import 'DAO/DB.dart';
+import 'models/Cuenta.dart';
+import 'models/Dinero.dart';
+
 class gastosForm extends StatefulWidget {
   const gastosForm({super.key});
 
@@ -12,6 +16,16 @@ class gastosForm extends StatefulWidget {
 }
 
 class _gastosFormState extends State<gastosForm> {
+  
+  final gastoController = TextEditingController();
+  final cuentaController = 2;
+  final asuntoController = TextEditingController();
+  String fechaController = '';
+  final tipoOperacionController = "esGasto";
+
+  late DB db = DB.instance;
+  late Dinero _dinero;
+
   int index = 0;
   NavBar? myNavBar;
 
@@ -43,9 +57,8 @@ class _gastosFormState extends State<gastosForm> {
       
     );
   }
-}
 
-Widget cuerpo(context) {
+  Widget cuerpo(context) {
   return ListView(shrinkWrap: true, children: [
     Container(
       color: const Color.fromARGB(255, 46, 46, 46),
@@ -132,6 +145,7 @@ Widget formMonto(context) {
         color: const Color.fromARGB(255, 217, 217, 217),
       ),
       child: TextFormField(
+        controller: gastoController,
         style: const TextStyle(fontSize: 35),
         textAlign: TextAlign.end,
         keyboardType: TextInputType.number,
@@ -213,9 +227,10 @@ Widget campoAsunto(context) {
             borderRadius: BorderRadius.circular(10),
             color: const Color.fromARGB(255, 217, 217, 217),
           ),
-          child: const Padding(
+          child:  Padding(
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: TextField(
+              controller: asuntoController,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: "Asunto",
@@ -240,6 +255,7 @@ dateTimePickerWidget(BuildContext context) {
       DateTime selectdate = dateTime;
       final selIOS = DateFormat('dd-MMM-yyyy - HH:mm').format(selectdate);
       print(selIOS);
+      fechaController = selIOS;
     },
   );
 }
@@ -285,6 +301,14 @@ Widget botonAgregar(context) {
             backgroundColor: Color.fromARGB(255, 217, 217, 217),
           ),
           onPressed: () {
+          _dinero = Dinero(
+                  id: null,
+                  idCuenta: 2,
+                  monto: int.parse(gastoController.text),
+                  asunto: asuntoController.text,
+                  fechaHora: fechaController,
+                  tipoOperacion: tipoOperacionController);
+                 db.insertDinero(_dinero);  
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -295,4 +319,5 @@ Widget botonAgregar(context) {
             "Agregar",
             style: TextStyle(fontSize: 25),
           )));
+}
 }
