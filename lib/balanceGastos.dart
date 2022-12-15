@@ -8,6 +8,8 @@ import 'package:flutter_application_fincet/verMasGastos.dart';
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
+import 'models/Cuenta.dart';
+
 class BalanceGastos extends StatefulWidget {
   const BalanceGastos({super.key});
 
@@ -81,8 +83,41 @@ Widget cuerpo(context) {
                           return Center(
                               child: (Column(
                             children: [
-                              balanceGastos(context, data),
-                              ultimosMovimientos(context, data)
+                              FutureBuilder(
+                                  future: ListaCuentas(),
+                                  builder: (ctx, snapshot) {
+                                    // Checking if future is resolved
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      // If we got an error
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                            '${snapshot.error} occurred',
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        );
+
+                                        // if we got our data
+                                      } else if (snapshot.hasData) {
+                                        // Extracting data from snapshot object
+                                        final List<Cuenta> dataCuentas =
+                                            snapshot.data as List<Cuenta>;
+                                        return Center(
+                                            child: (Column(
+                                          children: [
+                                            //  ultimosMovimientos(context, data, cuentas)
+                                            balanceGastos(context, data),
+                                            ultimosMovimientos(
+                                                context, data, dataCuentas)
+                                          ],
+                                        )));
+                                      }
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  })
                             ],
                           )));
                         }
@@ -113,6 +148,15 @@ ListaGastos() async {
   //Cuenta a=list[0];
   list.forEach((element) {
     print(element.monto);
+  });
+  return list.toList();
+}
+
+ListaCuentas() async {
+  List<Cuenta> list = await DB.listarCuentas();
+  //Cuenta a=list[0];
+  list.forEach((element) {
+    print(element.saldo);
   });
   return list.toList();
 }
@@ -168,7 +212,8 @@ Widget cajaGastos(context, List<Dinero> data) {
   );
 }
 
-Widget ultimosMovimientos(context, List<Dinero> data) {
+Widget ultimosMovimientos(
+    context, List<Dinero> data, List<Cuenta> dataCuentas) {
   return Column(
     children: [
       const SizedBox(
@@ -188,16 +233,24 @@ Widget ultimosMovimientos(context, List<Dinero> data) {
           ),
         ],
       ),
-      ultimosMovimientosDisplay(context, data)
+      ultimosMovimientosDisplay(context, data, dataCuentas)
     ],
   );
 }
 
-Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
-  final List<String> cuenta = <String>[
-    "Banco Santander",
-    "Efectivo",
-  ];
+String buscarCuenta(List<Cuenta> dataCuentas, int index) {
+  String nombreCuenta = '';
+  for (Cuenta i in dataCuentas)
+    if (index == int.parse(i.id.toString())) {
+      return nombreCuenta = i.nombreCuenta.toString();
+    }
+  ;
+  return nombreCuenta;
+}
+
+Widget ultimosMovimientosDisplay(
+    context, List<Dinero> data, List<Cuenta> dataCuentas) {
+ 
 
   List<Dinero> reverseData = data.reversed.toList();
 
@@ -205,6 +258,7 @@ Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
     itemCount: 2,
+    reverse: true,
     itemBuilder: (BuildContext context, int index) {
       return Card(
         //Caja ultimos movimientos
@@ -250,7 +304,9 @@ Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
                 Row(
                   children: [
                     // Cuenta del gasto
-                    Text(cuenta[index],
+                    Text(
+                        buscarCuenta(dataCuentas,
+                            int.parse(reverseData[index].idCuenta.toString())),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,

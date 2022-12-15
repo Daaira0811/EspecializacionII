@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_fincet/BalanceGeneral.dart';
 import 'package:flutter_application_fincet/balanceGastos.dart';
 import 'package:flutter_application_fincet/login.dart';
 
 void main() {
   runApp(const Fincet());
 }
+
 class Fincet extends StatelessWidget {
   const Fincet({super.key});
 
@@ -15,7 +17,7 @@ class Fincet extends StatelessWidget {
     return MaterialApp(
       title: 'Fincet',
       theme: ThemeData(),
-      home: const BalanceGastos(),
+      home: const BalanceGeneral(),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
+import 'models/Cuenta.dart';
 import 'models/Dinero.dart';
 
 class IngresosPage extends StatefulWidget {
@@ -26,6 +27,7 @@ class _IngresosPageState extends State<IngresosPage> {
 
   late DB db = DB.instance;
   late Dinero _dinero;
+  String? selectedValue;
 
   @override
   void initState() {
@@ -67,17 +69,56 @@ class _IngresosPageState extends State<IngresosPage> {
               children: [
                 header(context),
                 divisor(context),
-                formMonto(context),
-                formCuenta(context),
-                campoAsunto(context),
-                campoFechaHora(context),
-                botonAgregar(context)
+                FutureBuilder(
+                    future: ListaCuentas(),
+                    builder: (ctx, snapshot) {
+                      // Checking if future is resolved
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
+
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          final List<Cuenta> data =
+                              snapshot.data as List<Cuenta>;
+                          return Center(
+                              child: (Column(
+                            children: [
+                              formMonto(context),
+                              formCuenta(context, data),
+                              campoAsunto(context),
+                              campoFechaHora(context),
+                              botonAgregar(context, data)
+                            ],
+                          )));
+                        }
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }),
               ],
             ),
           ),
         ),
       ),
     ]);
+  }
+
+  ListaCuentas() async {
+    List<Cuenta> list = await DB.listarCuentas();
+    //Cuenta a=list[0];
+    list.forEach((element) {
+      print(element.saldo);
+    });
+    return list.toList();
   }
 
   Widget header(context) {
@@ -145,10 +186,9 @@ class _IngresosPageState extends State<IngresosPage> {
         ));
   }
 
-  Widget formCuenta(context) {
-    String? selectedValue;
-    List<String> opciones = ['Efectivo', 'Banco Santander'];
-
+  Widget formCuenta(context, List<Cuenta> data) {
+    List<String> opciones = [];
+    for (Cuenta i in data as List) opciones.add(i.nombreCuenta.toString());
     return Column(children: [
       Row(children: const [
         Padding(
@@ -279,7 +319,17 @@ class _IngresosPageState extends State<IngresosPage> {
     ]);
   }
 
-  Widget botonAgregar(context) {
+  int seleccionarIdCuenta(List<Cuenta> data) {
+    //print(selectedValue);
+    int numeroCuenta = 0;
+    for (Cuenta i in data as List)
+      if (i.nombreCuenta.toString() == selectedValue) {
+        numeroCuenta = int.parse(i.id.toString());
+      }
+    return numeroCuenta;
+  }
+
+  Widget botonAgregar(context, List<Cuenta> data) {
     return Container(
         padding: const EdgeInsets.only(top: 15),
         child: TextButton(
@@ -291,12 +341,12 @@ class _IngresosPageState extends State<IngresosPage> {
             onPressed: () {
               _dinero = Dinero(
                   id: null,
-                  idCuenta: 2,
+                  idCuenta: seleccionarIdCuenta(data),
                   monto: int.parse(montoController.text),
                   asunto: asuntoController.text,
                   fechaHora: fechaHoraController,
                   tipoOperacion: tipoOperacionController);
-                 db.insertDinero(_dinero);
+              db.insertDinero(_dinero);
 
               Navigator.push(
                   context,

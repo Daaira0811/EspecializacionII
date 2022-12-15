@@ -192,6 +192,7 @@ String buscarCuenta(List<Cuenta> dataCuentas, int index) {
 
 Widget ultimosMovimientosDisplay(
     context, List<Dinero> data, List<Cuenta> dataCuentas) {
+      
   List<Dinero> reverseData = data.reversed.toList();
 
   return ListView.separated(
