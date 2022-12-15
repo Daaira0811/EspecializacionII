@@ -135,8 +135,8 @@ ListaCuentas() async {
 }
 
 Widget misCuentas(context, List<Cuenta> data) {
-  for (Cuenta i in data as List)
-    Text(i.nombreCuenta.toString() + '' + i.moneda.toString());
+  // for (Cuenta i in data as List)
+  //   Text(i.nombreCuenta.toString() + '' + i.moneda.toString());
 
   // final List<String> banco = <String>[
   //   'Banco Santander',

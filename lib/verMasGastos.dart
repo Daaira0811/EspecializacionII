@@ -4,9 +4,11 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_application_fincet/widgets/navBar.dart';
 import 'package:flutter_application_fincet/widgets/sideMenu.dart';
 
+import 'DAO/DB.dart';
+import 'models/Dinero.dart';
+
 class VerMasGastos extends StatefulWidget {
   const VerMasGastos({super.key});
-
   @override
   State<StatefulWidget> createState() => _VerMasGastosState();
 }
@@ -54,14 +56,37 @@ Widget cuerpo(context) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                
-                ultimosMovimientos(context),
-                dia1(context),
-                dia2(context),
-                dia3(context)
-                
-               
-               
+                FutureBuilder(
+                    future: ListaGastos(),
+                    builder: (ctx, snapshot) {
+                      // Checking if future is resolved
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
+
+                          // if we got our data
+                        } else if (snapshot.hasData) {
+                          // Extracting data from snapshot object
+                          final List<Dinero> data =
+                              snapshot.data as List<Dinero>;
+                          return Center(
+                              child: (Column(
+                            children: [ultimosMovimientos(context, data)],
+                          )));
+                        }
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }),
+
+                //  ultimosMovimientos(context),
               ],
             ),
           ),
@@ -71,9 +96,16 @@ Widget cuerpo(context) {
   );
 }
 
+ListaGastos() async {
+  List<Dinero> list = await DB.listarDinero();
+  //Cuenta a=list[0];
+  list.forEach((element) {
+    print(element.monto);
+  });
+  return list.toList();
+}
 
-
-Widget ultimosMovimientos(context) {
+Widget ultimosMovimientos(context, List<Dinero> data) {
   return Column(
     children: [
       const SizedBox(
@@ -84,7 +116,7 @@ Widget ultimosMovimientos(context) {
           Text(
             // texto de ultimos movimientos
             textAlign: TextAlign.left,
-            "Todos los movimientos",
+            "Ultimos movimientos",
             style: TextStyle(
               color: Colors.white,
               fontSize: 15,
@@ -93,37 +125,37 @@ Widget ultimosMovimientos(context) {
           ),
         ],
       ),
-      
-      
+      ultimosMovimientosDisplay(context, data)
     ],
   );
 }
 
-
-Widget ultimosMovimientosDisplay(context) {
-  final List<String> categoriaGasto = <String>[
-    'Comida',
-    'Mascota',
-    'Comida',
-    
-  ];
+Widget ultimosMovimientosDisplay(context, List<Dinero> data) {
   final List<String> cuenta = <String>[
     "Banco Santander",
     "Efectivo",
+    "Banco Santander",
     "Efectivo",
-    
+    "Banco Santander",
+    "Banco Santander",
+    "Efectivo",
+    "Banco Santander",
+    "Efectivo",
+    "Banco Santander",
+    "Banco Santander",
+    "Efectivo",
+    "Banco Santander",
+    "Efectivo",
+    "Banco Santander",
   ];
-  final List<String> valor = <String>[
-    "-30.000 CLP",
-    "-7.000 CLP",
-    "-3.000 CLP",
-  ];
+
+  List<Dinero> reverseData = data.reversed.toList();
 
   return ListView.separated(
     shrinkWrap: true,
     padding: const EdgeInsets.all(8),
-    
-    itemCount: categoriaGasto.length,
+    itemCount: data.length - 1,
+    reverse: true,
     itemBuilder: (BuildContext context, int index) {
       return Card(
         //Caja ultimos movimientos
@@ -133,7 +165,7 @@ Widget ultimosMovimientosDisplay(context) {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.horizontal(
                 right: Radius.circular(15), left: Radius.zero)),
-        margin: const EdgeInsets.all(6),
+        margin: const EdgeInsets.all(10),
         child: InkWell(
             child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           ListTile(
@@ -142,7 +174,7 @@ Widget ultimosMovimientosDisplay(context) {
               children: const [
                 Padding(
                   padding: EdgeInsets.only(top: 15, left: 10),
-                  child: Icon(Icons.remove_circle_rounded),
+                  child: Icon(Icons.add_circle_rounded),
                 )
               ],
             ),
@@ -152,7 +184,7 @@ Widget ultimosMovimientosDisplay(context) {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Text(categoriaGasto[index],
+                  child: Text(reverseData[index].asunto.toString(),
                       style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -164,363 +196,7 @@ Widget ultimosMovimientosDisplay(context) {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 // Gasto
-                Text(valor[index],
-                    style: const TextStyle(fontSize: 12, color: Colors.white)),
-                Row(
-                  children: [
-                    // Cuenta del gasto
-                    Text(cuenta[index],
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        )),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ])),
-      );
-    },
-    separatorBuilder: (context, int index) => const Divider(),
-  );
-}
-
-//
-//
-//
-// Esto es chit para salir del paso despues se borra
-//
-//
-//
-
-
-Widget dia1(context) {
-  return Column(
-    children: [
-      const SizedBox(
-        height: 10,
-      ),
-      Row(
-        children: const [
-          Text(
-            // texto de ultimos movimientos
-            textAlign: TextAlign.left,
-            "lun., 14 de noviembre 2022",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-      dia1Display(context)
-      
-    ],
-  );
-}
-
-Widget dia1Display(context) {
-  final List<String> categoriaGasto = <String>[
-    'Ropa',
-    'Comida',
-    'Regalo',
-    
-  ];
-  final List<String> cuenta = <String>[
-    "Banco Santander",
-    "Efectivo",
-    "Efectivo",
-    
-  ];
-  final List<String> valor = <String>[
-    "-20.000 CLP",
-    "-5.000 CLP",
-    "-33.000 CLP",
-  ];
-
-  return ListView.separated(
-    shrinkWrap: true,
-    padding: const EdgeInsets.all(8),
-    
-    itemCount: categoriaGasto.length,
-    itemBuilder: (BuildContext context, int index) {
-      return Card(
-        //Caja ultimos movimientos
-        color: const Color.fromARGB(255, 96, 95, 95),
-        borderOnForeground: true,
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15), left: Radius.zero)),
-        margin: const EdgeInsets.all(6),
-        child: InkWell(
-            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          ListTile(
-            // Icono de ultimos movimientos
-            leading: Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(top: 15, left: 10),
-                  child: Icon(Icons.remove_circle_rounded),
-                )
-              ],
-            ),
-            title: Column(
-              // Categoria del gasto
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child:  Text(categoriaGasto[index],
-                  
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
-                )
-              ],
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // Gasto
-                Text(valor[index],
-                    style: const TextStyle(fontSize: 12, color: Colors.white)),
-                Row(
-                  children: [
-                    // Cuenta del gasto
-                    Text(cuenta[index],
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        )),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ])),
-      );
-    },
-    separatorBuilder: (context, int index) => const Divider(),
-  );
-}
-
-
-Widget dia2(context) {
-  return Column(
-    children: [
-      const SizedBox(
-        height: 10,
-      ),
-      Row(
-        children: const [
-          Text(
-            // texto de ultimos movimientos
-            textAlign: TextAlign.left,
-            "viernes., 11 de noviembre 2022",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-      dia2Display(context)
-      
-    ],
-  );
-}
-
-Widget dia2Display(context) {
-  final List<String> categoriaGasto = <String>[
-    'Comida',
-    'Ropa',
-    'Mascota',
-    
-  ];
-  final List<String> cuenta = <String>[
-    "Banco Santander",
-    "Efectivo",
-    "Efectivo",
-    
-  ];
-  final List<String> valor = <String>[
-    "-7.000 CLP",
-    "-4.000 CLP",
-    "-10.000 CLP",
-  ];
-
-  return ListView.separated(
-    shrinkWrap: true,
-    padding: const EdgeInsets.all(8),
-    
-    itemCount: categoriaGasto.length,
-    itemBuilder: (BuildContext context, int index) {
-      return Card(
-        //Caja ultimos movimientos
-        color: const Color.fromARGB(255, 96, 95, 95),
-        borderOnForeground: true,
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15), left: Radius.zero)),
-        margin: const EdgeInsets.all(6),
-        child: InkWell(
-            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          ListTile(
-            // Icono de ultimos movimientos
-            leading: Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(top: 15, left: 10),
-                  child: Icon(Icons.remove_circle_rounded),
-                )
-              ],
-            ),
-            title: Column(
-              // Categoria del gasto
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child:  Text(categoriaGasto[index],
-                  
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
-                )
-              ],
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // Gasto
-                Text(valor[index],
-                    style: const TextStyle(fontSize: 12, color: Colors.white)),
-                Row(
-                  children: [
-                    // Cuenta del gasto
-                    Text(cuenta[index],
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        )),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ])),
-      );
-    },
-    separatorBuilder: (context, int index) => const Divider(),
-  );
-}
-
-
-Widget dia3(context) {
-  return Column(
-    children: [
-      const SizedBox(
-        height: 10,
-      ),
-      Row(
-        children: const [
-          Text(
-            // texto de ultimos movimientos
-            textAlign: TextAlign.left,
-            "jue., 10 de noviembre 2022",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-      dia3Display(context)
-      
-    ],
-  );
-}
-
-Widget dia3Display(context) {
-  final List<String> categoriaGasto = <String>[
-    'Comida',
-    'Comida',
-    'Comida',
-    
-  ];
-  final List<String> cuenta = <String>[
-    "Banco Santander",
-    "Efectivo",
-    "Efectivo",
-    
-  ];
-  final List<String> valor = <String>[
-    "-10.000 CLP",
-    "-2.000 CLP",
-    "-1.500 CLP",
-  ];
-
-  return ListView.separated(
-    shrinkWrap: true,
-    padding: const EdgeInsets.all(8),
-    
-    itemCount: categoriaGasto.length,
-    itemBuilder: (BuildContext context, int index) {
-      return Card(
-        //Caja ultimos movimientos
-        color: const Color.fromARGB(255, 96, 95, 95),
-        borderOnForeground: true,
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15), left: Radius.zero)),
-        margin: const EdgeInsets.all(6),
-        child: InkWell(
-            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          ListTile(
-            // Icono de ultimos movimientos
-            leading: Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(top: 15, left: 10),
-                  child: Icon(Icons.remove_circle_rounded),
-                )
-              ],
-            ),
-            title: Column(
-              // Categoria del gasto
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child:  Text(categoriaGasto[index],
-                  
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
-                )
-              ],
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // Gasto
-                Text(valor[index],
+                Text("- " + reverseData[index].monto.toString(),
                     style: const TextStyle(fontSize: 12, color: Colors.white)),
                 Row(
                   children: [
